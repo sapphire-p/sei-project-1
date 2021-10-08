@@ -27,7 +27,25 @@ body {
 .grid div {
   border: 1px solid lightgrey;
   flex-grow: 1;
-  height: 10%;
-  width: 10%;
+  height: 9.0909%;
+  width: 9.0909%;
   color: grey;
+}
+
+.gun {
+  background-image: url("../assets/Gun-person.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.dino {
+  background-image: url("../assets/T-rex.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.missile {
+  background-image: url("../assets/Missile.png");
+  background-repeat: no-repeat;
+  background-size: contain;
 }
