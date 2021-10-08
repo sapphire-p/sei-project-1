@@ -14,7 +14,7 @@ let livesRemaining = 3
 // Gun, Dinos, Missile, Rock position and class variables
 
 const gunStartPosition = 104 // index number
-let gunCurrentPosition // index number
+let gunCurrentPosition = 105 // index number
 const gunClass = "gun"
 
 const dinosStartPosition = [26, 27, 28] // array of index numbers
@@ -45,7 +45,7 @@ let missileSpeed = 1000
 const startButton = document.querySelector(".start-button")
 startButton.addEventListener("click", startGame)
 
-// document.addEventListener('keyup', keysGunAction)
+document.addEventListener('keyup', keysGunAction)
 
 
 
@@ -78,15 +78,31 @@ function removeItem(itemClass, position) {
 
 
 
-// function keysGunAction(event) {
-//   console.log("keysGunAction() function called")
-//   const key = event.keyCode
+function keysGunAction(event) {
+  console.log("keysGunAction() function called")
+  const key = event.keyCode
 
-//   if ()
-// }
+  removeItem(gunClass, gunCurrentPosition)
+
+  if (key === 39 && gunCurrentPosition !== (width * width) - (width + 1)) {
+    console.log("Gun moves RIGHT")
+    gunCurrentPosition++
+  } else if (key === 37 && gunCurrentPosition !== width * (width - 2)) {
+    console.log("Gun moves LEFT")
+    gunCurrentPosition--
+  } else if (key === 32) {
+    event.preventDefault()
+    console.log("Space bar makes Gun fire Missile")
+  } else {
+    console.log("Key is invalid")
+  }
+
+  addItem(gunClass, gunCurrentPosition)
+
+}
 
 
 
-// cells[gunStartPosition].classList.add("gun")
+cells[gunCurrentPosition].classList.add("gun")
 // cells[82].classList.add("dino")
 // cells[93].classList.add("missile")
