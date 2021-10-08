@@ -35,8 +35,14 @@ let dinosSpeed = 1000
 let rockSpeed = 1000
 let missileSpeed = 1000
 
+// Event Listeners
 
+const startButton = document.querySelector(".start-button")
+startButton.addEventListener("click", startGame)
 
+function startGame() {
+  console.log("Game started!")
+}
 
 function createGrid() {
   for (let i = 0; i < cellCount; i++) {
