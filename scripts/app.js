@@ -17,8 +17,8 @@ const gunStartPosition = 104 // index number
 let gunCurrentPosition = 105 // index number
 const gunClass = "gun"
 
-const dinosStartPosition = [26, 27, 28] // array of index numbers
-let dinosCurrentPosition = [26, 27, 28] // array of index numbers
+const dinosStartPosition = [22, 23, 24] // array of index numbers - should be initialised at [26, 27, 28] for start of game
+let dinosCurrentPosition = [22, 23, 24] // array of index numbers
 const dinoClass = "dino"
 
 let missileCurrentPosition // index number
@@ -62,28 +62,305 @@ function startGame() {
   }
 
   addItem(gunClass, gunStartPosition)
-  addItem(dinoClass, dinosStartPosition) //! See below ("This all works, but...")
+  addItem(dinoClass, dinosCurrentPosition) //! Formerly dinosStartPosition - See below ("This all works, but...")
+
+
+  // dinosTimer = setInterval(() => { //* dinosTimer setInterval to control the movement of the dinos every dinosSpeed (1 second)
+  // }, dinosSpeed)
+
+  // if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) || (dinosCurrentPosition[0] % width === 0)) //* This conditional logic states: "If: last dino is in the right-most cell of the grid *OR* first dino is in the left-most cell of the grid"
+
+  // if (dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) //* This conditional logic states: "If: last dino is in the right-most cell of the grid"
+
+  // if (dinosCurrentPosition[0] % width === 0) //* This conditional logic states: "If: first dino is in the left-most cell of the grid"
+
+  //* This moves all the dinos one cell to the right:
+  // removeItem(dinoClass, dinosCurrentPosition)
+  // dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { //? map returns a new array of equal length
+  //   return dinoPosition += 1 //? This updates the position of each dino to one cell to the right, by adding one to each dino index number
+  // })
+  // addItem(dinoClass, dinosCurrentPosition)
+
+  //* This moves all the dinos one cell to the left:
+  // removeItem(dinoClass, dinosCurrentPosition)
+  // dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+  //   return dinoPosition -= 1
+  // })
+  // addItem(dinoClass, dinosCurrentPosition)
+
+
+  //* This moves all the dinos one cell down:
+  // removeItem(dinoClass, dinosCurrentPosition)
+  // dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+  //   return dinoPosition = dinoPosition + width
+  // })
+  // addItem(dinoClass, dinosCurrentPosition)
+
+
+
+
+
+  let counter = 0
 
   dinosTimer = setInterval(() => {
-
-    if (dinosCurrentPosition[dinosCurrentPosition.length - 1] % width !== width - 1) { // "If the right-most dino is not in the right-most cell of the grid, move the dinos right"
-      removeItem(dinoClass, dinosStartPosition) // ! This all works, but is this repetitive? Is only a dinosCurrentPosition variable needed in here, that is then reset to a constant dinosStartPosition when the "Play Again" button is pushed?
+    counter++
+    if (counter > 4) {
+      clearInterval(dinosTimer)
+      counter = 0
+    } else {
       removeItem(dinoClass, dinosCurrentPosition)
       dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
         return dinoPosition += 1 // This updates the position of each dino to one cell to the right, by adding one to each dino index number
       })
       console.log(dinosCurrentPosition)
       addItem(dinoClass, dinosCurrentPosition)
-    } else {
-      removeItem(dinoClass, dinosCurrentPosition)
-      dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-        return dinoPosition = dinoPosition + width
-      })
-      addItem(dinoClass, dinosCurrentPosition)
+    }
+  }, dinosSpeed)
+
+
+
+  dinosTimer = setInterval(() => {
+
+    removeItem(dinoClass, dinosCurrentPosition)
+    dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+      return dinoPosition += 1 // This updates the position of each dino to one cell to the right, by adding one to each dino index number
+    })
+    console.log(dinosCurrentPosition)
+    addItem(dinoClass, dinosCurrentPosition)
+
+    if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1)) {
+      for (i = 1; i === 1; i++) {
+        removeItem(dinoClass, dinosCurrentPosition)
+        dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+          return dinoPosition = dinoPosition + width
+        })
+        addItem(dinoClass, dinosCurrentPosition)
+      }
     }
 
 
+
+    // else if (dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) {
+    //   removeItem(dinoClass, dinosCurrentPosition)
+    //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+    //     return dinoPosition -= 1 // This updates the position of each dino to one cell to the right, by adding one to each dino index number
+    //   })
+    //   console.log(dinosCurrentPosition)
+    //   addItem(dinoClass, dinosCurrentPosition)
+    // } else {
+    //   removeItem(dinoClass, dinosCurrentPosition)
+    //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+    //     return dinoPosition += 1 // This updates the position of each dino to one cell to the right, by adding one to each dino index number
+    //   })
+    //   console.log(dinosCurrentPosition)
+    //   addItem(dinoClass, dinosCurrentPosition)
+    // }
+
   }, dinosSpeed) // dinosSpeed variable has been set to 1000 milliseconds, or 1 sec
+
+
+
+  //     counter++
+  //   if (counter > 4) {
+  //     clearInterval(dinosTimer)
+  //     counter = 0
+  //   } else {
+  //     removeItem(dinoClass, dinosStartPosition) // ! This all works, but is this repetitive? Is only a dinosCurrentPosition variable needed in here, that is then reset to a constant dinosStartPosition when the "Play Again" button is pushed?
+  //     removeItem(dinoClass, dinosCurrentPosition)
+  //     dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+  //       return dinoPosition += 1 // This updates the position of each dino to one cell to the right, by adding one to each dino index number
+  //     })
+  //     console.log(dinosCurrentPosition)
+  //     addItem(dinoClass, dinosCurrentPosition)
+  //   }
+
+
+
+  // setTimeout(() => {
+  //   console.log("One second delay")
+  // }, 3000)
+
+  // dinosTimer = setInterval(() => {
+
+  //   counter++
+
+  //   if (counter > 4) {
+  //     clearInterval(dinosTimer)
+  //     counter = 0
+  //   } else {
+  //     removeItem(dinoClass, dinosStartPosition) // ! This all works, but is this repetitive? Is only a dinosCurrentPosition variable needed in here, that is then reset to a constant dinosStartPosition when the "Play Again" button is pushed?
+  //     removeItem(dinoClass, dinosCurrentPosition)
+  //     dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+  //       return dinoPosition -= 1 // This updates the position of each dino to one cell to the right, by adding one to each dino index number
+  //     })
+  //     console.log(dinosCurrentPosition)
+  //     addItem(dinoClass, dinosCurrentPosition)
+  //   }
+
+  // }, dinosSpeed)
+
+
+
+
+
+  // if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) || (dinosCurrentPosition[0] % width === 0)) {
+  //   for (i = 1; i === 1; i++) {
+  //     removeItem(dinoClass, dinosCurrentPosition)
+  //     dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+  //       return dinoPosition = dinoPosition + width
+  //     })
+  //     addItem(dinoClass, dinosCurrentPosition)
+  //   }
+  //   for (i = 1; i === 1; i++) {
+  //     removeItem(dinoClass, dinosCurrentPosition)
+  //     dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+  //       return dinoPosition -= 1 // This updates the position of each dino to one cell to the left, by subtracting one from each dino index number
+  //     })
+  //     console.log(dinosCurrentPosition)
+  //     addItem(dinoClass, dinosCurrentPosition)
+  //   }
+  // }
+
+  // if (dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) {
+  //   removeItem(dinoClass, dinosCurrentPosition)
+  //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+  //     return dinoPosition -= 1 // This updates the position of each dino to one cell to the left, by subtracting one from each dino index number
+  //   })
+  //   console.log(dinosCurrentPosition)
+  //   addItem(dinoClass, dinosCurrentPosition)
+  // } else {
+  //   removeItem(dinoClass, dinosStartPosition) // ! This all works, but is this repetitive? Is only a dinosCurrentPosition variable needed in here, that is then reset to a constant dinosStartPosition when the "Play Again" button is pushed?
+  //   removeItem(dinoClass, dinosCurrentPosition)
+  //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+  //     return dinoPosition += 1 // This updates the position of each dino to one cell to the right, by adding one to each dino index number
+  //   })
+  //   console.log(dinosCurrentPosition)
+  //   addItem(dinoClass, dinosCurrentPosition)
+  // }
+
+
+
+
+  // removeItem(dinoClass, dinosStartPosition) // ! This all works, but is this repetitive? Is only a dinosCurrentPosition variable needed in here, that is then reset to a constant dinosStartPosition when the "Play Again" button is pushed?
+  // removeItem(dinoClass, dinosCurrentPosition)
+  // dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+  //   return dinoPosition += 1 // This updates the position of each dino to one cell to the right, by adding one to each dino index number
+  // })
+  // console.log(dinosCurrentPosition)
+  // addItem(dinoClass, dinosCurrentPosition)
+
+
+
+  // removeItem(dinoClass, dinosStartPosition) // ! This all works, but is this repetitive? Is only a dinosCurrentPosition variable needed in here, that is then reset to a constant dinosStartPosition when the "Play Again" button is pushed?
+  // removeItem(dinoClass, dinosCurrentPosition)
+  // dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+  //   return dinoPosition -= 1 // This updates the position of each dino to one cell to the left, by subtracting one from each dino index number
+  // })
+  // console.log(dinosCurrentPosition)
+  // addItem(dinoClass, dinosCurrentPosition)
+
+
+
+
+
+  // if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) || (dinosCurrentPosition[0] % width === 0)) {
+  //   removeItem(dinoClass, dinosCurrentPosition)
+  //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+  //     return dinoPosition = dinoPosition + width
+  //   })
+  //   addItem(dinoClass, dinosCurrentPosition)
+  // }
+
+
+
+
+
+  // if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1)) {
+  //       removeItem(dinoClass, dinosStartPosition) // ! This all works, but is this repetitive? Is only a dinosCurrentPosition variable needed in here, that is then reset to a constant dinosStartPosition when the "Play Again" button is pushed?
+  //       removeItem(dinoClass, dinosCurrentPosition)
+  //       dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+  //         return dinoPosition -= 1 // This updates the position of each dino to one cell to the left, by subtracting one from each dino index number
+  //       })
+  //       console.log(dinosCurrentPosition)
+  //       addItem(dinoClass, dinosCurrentPosition)
+
+  // if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) || (dinosCurrentPosition[0] % width === 0)) {
+  //     removeItem(dinoClass, dinosCurrentPosition)
+  //     dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+  //       return dinoPosition = dinoPosition + width
+  //     })
+  //     addItem(dinoClass, dinosCurrentPosition)
+
+  // if ()
+
+
+  //     } else {
+  //       removeItem(dinoClass, dinosStartPosition) // ! This all works, but is this repetitive? Is only a dinosCurrentPosition variable needed in here, that is then reset to a constant dinosStartPosition when the "Play Again" button is pushed?
+  //       removeItem(dinoClass, dinosCurrentPosition)
+  //       dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+  //         return dinoPosition += 1 // This updates the position of each dino to one cell to the right, by adding one to each dino index number
+  //       })
+  //       console.log(dinosCurrentPosition)
+  //       addItem(dinoClass, dinosCurrentPosition)
+  //     }
+  //   }
+
+
+
+
+
+
+  // if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) || (dinosCurrentPosition[0] % width === 0)) {
+  //   removeItem(dinoClass, dinosCurrentPosition)
+  //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+  //     return dinoPosition = dinoPosition + width
+  //   })
+  //   addItem(dinoClass, dinosCurrentPosition)
+  // } else if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width !== width - 1) && (dinosCurrentPosition[0] % width === 0)) {
+  //   removeItem(dinoClass, dinosStartPosition) // ! This all works, but is this repetitive? Is only a dinosCurrentPosition variable needed in here, that is then reset to a constant dinosStartPosition when the "Play Again" button is pushed?
+  //   removeItem(dinoClass, dinosCurrentPosition)
+  //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+  //     return dinoPosition += 1 // This updates the position of each dino to one cell to the right, by adding one to each dino index number
+  //   })
+  //   console.log(dinosCurrentPosition)
+  //   addItem(dinoClass, dinosCurrentPosition)
+  // } else if ((dinosCurrentPosition[0] % width !== 0) && (dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1)) {
+  //   removeItem(dinoClass, dinosStartPosition) // ! This all works, but is this repetitive? Is only a dinosCurrentPosition variable needed in here, that is then reset to a constant dinosStartPosition when the "Play Again" button is pushed?
+  //   removeItem(dinoClass, dinosCurrentPosition)
+  //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+  //     return dinoPosition -= 1 // This updates the position of each dino to one cell to the left, by subtracting one from each dino index number
+  //   })
+  //   console.log(dinosCurrentPosition)
+  //   addItem(dinoClass, dinosCurrentPosition)
+  // }
+
+
+
+  //   if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width !== width - 1) || (dinosCurrentPosition[0] % width !== 0)) { // "If the right-most dino is not in the right-most cell of the grid, move the dinos right"
+  //   removeItem(dinoClass, dinosStartPosition) // ! This all works, but is this repetitive? Is only a dinosCurrentPosition variable needed in here, that is then reset to a constant dinosStartPosition when the "Play Again" button is pushed?
+  //   removeItem(dinoClass, dinosCurrentPosition)
+  //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+  //     return dinoPosition += 1 // This updates the position of each dino to one cell to the right, by adding one to each dino index number
+  //   })
+  //   console.log(dinosCurrentPosition)
+  //   addItem(dinoClass, dinosCurrentPosition)
+  // } else {
+  //   removeItem(dinoClass, dinosCurrentPosition)
+  //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+  //     return dinoPosition = dinoPosition + width
+  //   })
+  //   addItem(dinoClass, dinosCurrentPosition)
+
+
+  // removeItem(dinoClass, dinosCurrentPosition)
+  // dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+  //   return dinoPosition = dinoPosition -= 1
+  // })
+  //   // addItem(dinoClass, dinosCurrentPosition)
+  // }
+
+
+  // }, 
 
 }
 
@@ -125,9 +402,12 @@ function keysGunAction(event) {
   } else if (key === 37 && gunCurrentPosition !== width * (width - 2)) {
     console.log("Gun moves LEFT")
     gunCurrentPosition--
-  } else if (key === 32) {
+  } else if (key === 32) { // Space bar is key 32, if you want to change it to up arrow, up arrow is 38
     event.preventDefault()
     console.log("Space bar makes Gun fire Missile")
+    missileCurrentPosition = gunCurrentPosition - width
+    console.log(missileCurrentPosition, gunCurrentPosition)
+    addItem(missileClass, missileCurrentPosition)
   } else {
     console.log("Key is invalid")
   }
