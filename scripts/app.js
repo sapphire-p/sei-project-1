@@ -68,12 +68,25 @@ createGrid()
 
 function addItem(itemClass, position) {
   // add some control flow with conditional logic to say "If itemClass is gunClass, do this, else if itemClass is dinoClass, do this"
-  cells[position].classList.add(itemClass)
+  if (itemClass === gunClass || itemClass === missileClass || itemClass === rockClass) {
+    cells[position].classList.add(itemClass)
+  } else if (itemClass === dinoClass) {
+    position.forEach(dinoPosition => { // Here, "position" will be either dinosStartPosition array, or dinosCurrentPosition array
+      cells[dinoPosition].classList.add(itemClass)
+    })
+  }
 }
+
 
 function removeItem(itemClass, position) {
   // add some control flow with conditional logic to say "If itemClass is gunClass, do this, else if itemClass is dinoClass, do this"
-  cells[position].classList.remove(itemClass)
+  if (itemClass === gunClass || itemClass === missileClass || itemClass === rockClass) {
+    cells[position].classList.remove(itemClass)
+  } else if (itemClass === dinoClass) {
+    position.forEach(dinoPosition => { // Here, "position" will be either dinosStartPosition array, or dinosCurrentPosition array
+      cells[dinoPosition].classList.remove(itemClass)
+    })
+  }
 }
 
 
