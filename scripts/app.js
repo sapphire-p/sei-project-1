@@ -18,7 +18,7 @@ let gunCurrentPosition = 105 // index number
 const gunClass = "gun"
 
 const dinosStartPosition = [26, 27, 28] // array of index numbers
-let dinosCurrentPosition = [] // array of index numbers
+let dinosCurrentPosition = [26, 27, 28] // array of index numbers
 const dinoClass = "dino"
 
 let missileCurrentPosition // index number
@@ -49,6 +49,7 @@ document.addEventListener('keyup', keysGunAction)
 
 
 
+
 function startGame() {
 
   console.log("startGame() function called")
@@ -61,16 +62,28 @@ function startGame() {
   }
 
   addItem(gunClass, gunStartPosition)
-  addItem(dinoClass, dinosStartPosition)
+  addItem(dinoClass, dinosStartPosition) //! See below ("This all works, but...")
 
   dinosTimer = setInterval(() => {
-    removeItem(dinoClass, dinosStartPosition)
-    dinosCurrentPosition = dinosStartPosition.map(dinoPosition => { // map returns a new array of equal length
-      return dinoPosition += 1 // This updates the position of each dino to one cell to the right, by adding one to each dino index number
-    })
-    console.log(dinosCurrentPosition)
-    addItem(dinoClass, dinosCurrentPosition)
-  }, dinosSpeed) // dinoSpeed variable has been set to 1000 milliseconds, or 1 sec
+
+    if (dinosCurrentPosition[dinosCurrentPosition.length - 1] % width !== width - 1) { // "If the right-most dino is not in the right-most cell of the grid, move the dinos right"
+      removeItem(dinoClass, dinosStartPosition) // ! This all works, but is this repetitive? Is only a dinosCurrentPosition variable needed in here, that is then reset to a constant dinosStartPosition when the "Play Again" button is pushed?
+      removeItem(dinoClass, dinosCurrentPosition)
+      dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { // map returns a new array of equal length
+        return dinoPosition += 1 // This updates the position of each dino to one cell to the right, by adding one to each dino index number
+      })
+      console.log(dinosCurrentPosition)
+      addItem(dinoClass, dinosCurrentPosition)
+    } else {
+      removeItem(dinoClass, dinosCurrentPosition)
+      dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+        return dinoPosition = dinoPosition + width
+      })
+      addItem(dinoClass, dinosCurrentPosition)
+    }
+
+
+  }, dinosSpeed) // dinosSpeed variable has been set to 1000 milliseconds, or 1 sec
 
 }
 
@@ -125,17 +138,17 @@ function keysGunAction(event) {
 
 
 
-// cells[gunCurrentPosition].classList.add("gun")
-// cells[82].classList.add("dino")
-// cells[93].classList.add("missile")
+  // cells[gunCurrentPosition].classList.add("gun")
+  // cells[82].classList.add("dino")
+  // cells[93].classList.add("missile")
 
 
-// function createGrid() {
-//   for (let i = 0; i < cellCount; i++) {
-//     const cell = document.createElement("div")
-//     cell.innerText = i
-//     grid.appendChild(cell)
-//     cells.push(cell)
-//   }
+  // function createGrid() {
+  //   for (let i = 0; i < cellCount; i++) {
+  //     const cell = document.createElement("div")
+  //     cell.innerText = i
+  //     grid.appendChild(cell)
+  //     cells.push(cell)
+  //   }
 
-//   createGrid()
+  //   createGrid()
