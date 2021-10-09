@@ -50,10 +50,9 @@ document.addEventListener('keyup', keysGunAction)
 
 
 function startGame() {
-  console.log("startGame() function called")
-}
 
-function createGrid() {
+  console.log("startGame() function called")
+
   for (let i = 0; i < cellCount; i++) {
     const cell = document.createElement("div")
     cell.innerText = i
@@ -63,11 +62,9 @@ function createGrid() {
 
 }
 
-createGrid()
-
 
 function addItem(itemClass, position) {
-  // add some control flow with conditional logic to say "If itemClass is gunClass, do this, else if itemClass is dinoClass, do this"
+  // The following control flow with conditional logic says "If itemClass is gunClass, do this, else if itemClass is dinoClass, do this"
   if (itemClass === gunClass || itemClass === missileClass || itemClass === rockClass) {
     cells[position].classList.add(itemClass)
   } else if (itemClass === dinoClass) {
@@ -79,7 +76,7 @@ function addItem(itemClass, position) {
 
 
 function removeItem(itemClass, position) {
-  // add some control flow with conditional logic to say "If itemClass is gunClass, do this, else if itemClass is dinoClass, do this"
+  // The following control flow with conditional logic says "If itemClass is gunClass, do this, else if itemClass is dinoClass, do this"
   if (itemClass === gunClass || itemClass === missileClass || itemClass === rockClass) {
     cells[position].classList.remove(itemClass)
   } else if (itemClass === dinoClass) {
@@ -116,6 +113,17 @@ function keysGunAction(event) {
 
 
 
-cells[gunCurrentPosition].classList.add("gun")
+// cells[gunCurrentPosition].classList.add("gun")
 // cells[82].classList.add("dino")
 // cells[93].classList.add("missile")
+
+
+// function createGrid() {
+//   for (let i = 0; i < cellCount; i++) {
+//     const cell = document.createElement("div")
+//     cell.innerText = i
+//     grid.appendChild(cell)
+//     cells.push(cell)
+//   }
+
+//   createGrid()
