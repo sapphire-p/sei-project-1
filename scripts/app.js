@@ -18,7 +18,7 @@ let gunCurrentPosition = 105 // index number
 const gunClass = "gun"
 
 const dinosStartPosition = [26, 27, 28] // array of index numbers
-let dinosCurrentPosition // array of index numbers
+let dinosCurrentPosition = [] // array of index numbers
 const dinoClass = "dino"
 
 let missileCurrentPosition // index number
@@ -53,12 +53,24 @@ function startGame() {
 
   console.log("startGame() function called")
 
-  for (let i = 0; i < cellCount; i++) {
+  for (let i = 0; i < cellCount; i++) { // This block of code created the grid
     const cell = document.createElement("div")
     cell.innerText = i
     grid.appendChild(cell)
     cells.push(cell)
   }
+
+  addItem(gunClass, gunStartPosition)
+  addItem(dinoClass, dinosStartPosition)
+
+  dinosTimer = setInterval(() => {
+    removeItem(dinoClass, dinosStartPosition)
+    dinosCurrentPosition = dinosStartPosition.map(dinoPosition => { // map returns a new array of equal length
+      return dinoPosition += 1 // This updates the position of each dino to one cell to the right, by adding one to each dino index number
+    })
+    console.log(dinosCurrentPosition)
+    addItem(dinoClass, dinosCurrentPosition)
+  }, dinosSpeed) // dinoSpeed variable has been set to 1000 milliseconds, or 1 sec
 
 }
 
