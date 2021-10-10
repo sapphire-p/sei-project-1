@@ -11,10 +11,13 @@ const cells = []
 let score = 0
 let livesRemaining = 3
 
+const scoreDisplay = document.querySelector(".score-display")
+const livesDisplay = document.querySelector(".lives-display")
+
 // Gun, Dinos, Missile, Rock position and class variables
 
 const gunStartPosition = 104 // index number
-let gunCurrentPosition = 105 // index number
+let gunCurrentPosition = 104 // index number
 const gunClass = "gun"
 
 const dinosStartPosition = [22, 23, 24] // array of index numbers - should be initialised at [26, 27, 28] for start of game
@@ -241,7 +244,8 @@ function handleMissile() {
         removeItem(dinoClass, dinosCurrentPosition)
         dinosCurrentPosition.splice(indexOfCollisionCellInDinosCurrentPosition, 1) // Updates the dinosCurrentPosition array to reflect the missile collision deleting the dino
         addItem(dinoClass, dinosCurrentPosition) // Displays updated dinosCurrentPosition array with collision dino deleted
-        score += 100 // This adds 100 to the score for destroying a dino //! Must also update innerText of HTML score element
+        score += 100 // This adds 100 to the score for destroying a dino
+        scoreDisplay.innerText = score
         clearInterval(missileTimer)
       } else if (missileCurrentPosition < width) { // If the missile reaches the top of the grid, the missile is removed and the missileTimer is cleared
         removeItem(missileClass, missileCurrentPosition)
@@ -257,7 +261,7 @@ function handleMissile() {
 
 }
 
-// handleMissile()
+
 
 
 
