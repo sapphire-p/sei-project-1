@@ -66,9 +66,12 @@ function startGame() {
     cells.push(cell)
   }
 
-  addItem(gunClass, gunStartPosition)
-  addItem(dinoClass, dinosCurrentPosition) //! Formerly dinosStartPosition - See below ("This all works, but...")
-
+  gunCurrentPosition = gunStartPosition
+  addItem(gunClass, gunCurrentPosition)
+  dinosCurrentPosition = dinosStartPosition
+  addItem(dinoClass, dinosCurrentPosition) //! Formerly dinosStartPosition // I believe setting xCurrentPosition to xStartPosition in the lines immediately above may do the trick
+  rockCurrentPosition = 44
+  addItem(rockClass, rockCurrentPosition)
 
 
 
@@ -189,9 +192,6 @@ function keysGunAction(event) {
     event.preventDefault()
     console.log("Space bar makes Gun fire Missile")
     handleMissile()
-    // missileCurrentPosition = gunCurrentPosition - width
-    // console.log(missileCurrentPosition, gunCurrentPosition)
-    // addItem(missileClass, missileCurrentPosition)
   } else {
     console.log("Key is invalid")
   }
