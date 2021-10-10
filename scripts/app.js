@@ -74,12 +74,12 @@ function startGame() {
   addItem(rockClass, rockCurrentPosition)
 
 
-  // let counter
+  let counter
 
   dinosTimer = setInterval(() => {
 
     if (dinosCurrentPosition[0] % width < (width - dinosStartPosition.length)) { // "If the index of the left-most dino is less than the remainder of width minus the length of the starting dinos array (number of dinos initially)"
-
+      // if (dinosCurrentPosition[0] % width === 0) {
       removeItem(dinoClass, dinosCurrentPosition)
       dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
         return dinoPosition += 1
@@ -108,8 +108,24 @@ function startGame() {
       // addItem(dinoClass, dinosCurrentPosition)
       // console.log("Dinos move right")
       // clearInterval(dinosTimer)
+    } else if (dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1 && (dinosCurrentPosition[dinosCurrentPosition.length - 1] % 2 === 1)) {
+      counter++
+      removeItem(dinoClass, dinosCurrentPosition)
+      dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+        return dinoPosition += width
+      })
+      addItem(dinoClass, dinosCurrentPosition)
+    } else if ((dinosCurrentPosition[dinosCurrentPosition.length - 1]) > (width - dinosStartPosition.length)) {
+      removeItem(dinoClass, dinosCurrentPosition)
+      dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+        return dinoPosition -= 1
+      })
+      addItem(dinoClass, dinosCurrentPosition)
+    } else if ((dinosCurrentPosition[0] / width) >= width - 1) { // "else if: the cell index of the left-most dino divided by width is greater than or equal to (width - 1), i.e. the left-most dino has reached the bottom row:"
+      clearInterval(dinosTimer)
     }
-    // else if ()
+
+    // else if (counter = "odd number") //! ?
 
 
 
@@ -174,8 +190,10 @@ function startGame() {
   // addItem(dinoClass, dinosCurrentPosition)
 
 
-
 }
+
+
+/* addItem and removeItem functions */
 
 
 function addItem(itemClass, position) {
@@ -201,6 +219,9 @@ function removeItem(itemClass, position) {
   }
 }
 
+
+
+/* keysGunAction function */
 
 
 function keysGunAction(event) {
@@ -229,6 +250,7 @@ function keysGunAction(event) {
 
 
 
+/* handleMissile function */
 
 
 function handleMissile() {
@@ -278,7 +300,7 @@ function handleMissile() {
         cells[cellIndexOfMissileDinoCollision].classList.add(exposionClass)
         setTimeout(() => {
           cells[cellIndexOfMissileDinoCollision].classList.remove(exposionClass)
-        }, 500)
+        }, 400)
         // cells[cellIndexOfMissileDinoCollision].classList.remove(dinoClass) //! The 3 lines of code below do this job instead, so this line is now redundant. Removes the dino class from the cell where collision occurred
         removeItem(dinoClass, dinosCurrentPosition)
         dinosCurrentPosition.splice(indexOfCollisionCellInDinosCurrentPosition, 1) // Updates the dinosCurrentPosition array to reflect the missile collision deleting the dino
@@ -291,7 +313,7 @@ function handleMissile() {
         cells[cellIndexOfMissileRockCollision].classList.add(exposionClass)
         setTimeout(() => {
           cells[cellIndexOfMissileRockCollision].classList.remove(exposionClass)
-        }, 500)
+        }, 400)
         cells[cellIndexOfMissileRockCollision].classList.remove(rockClass)
         clearInterval(missileTimer)
       } else if (missileCurrentPosition < width) { // If the missile reaches the top of the grid, the missile is removed and the missileTimer is cleared
