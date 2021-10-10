@@ -65,6 +65,48 @@ function startGame() {
   addItem(dinoClass, dinosCurrentPosition) //! Formerly dinosStartPosition - See below ("This all works, but...")
 
 
+
+
+  dinosTimer = setInterval(() => {
+
+    if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) || (dinosCurrentPosition[0] % width === 0)) {
+      removeItem(dinoClass, dinosCurrentPosition)
+      dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+        return dinoPosition += width
+      })
+      addItem(dinoClass, dinosCurrentPosition)
+      clearInterval(dinosTimer)
+    }
+
+    // removeItem(dinoClass, dinosCurrentPosition)
+    // dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { //? map returns a new array of equal length
+    //   return dinoPosition += 1 //? This updates the position of each dino to one cell to the right, by adding one to each dino index number
+    // })
+    // addItem(dinoClass, dinosCurrentPosition)
+
+
+
+    // if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) || (dinosCurrentPosition[0] % width === 0)) {
+    //   dinosTimer = setInterval(() => {
+    //     removeItem(dinoClass, dinosCurrentPosition)
+    //     dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+    //       return dinoPosition += width
+    //     })
+    //     addItem(dinoClass, dinosCurrentPosition)
+    //   }, dinosSpeed)
+    // }
+
+
+  }, dinosSpeed)
+
+
+
+
+
+  //? Try: splitting the 3 light green points below into 3 separate functions
+  //? Creating a sequence of callback functions to enable each action (right, left, down) to happen sequentially
+
+
   // dinosTimer = setInterval(() => { //* dinosTimer setInterval to control the movement of the dinos every dinosSpeed (1 second)
   // }, dinosSpeed)
 
@@ -92,7 +134,7 @@ function startGame() {
   //* This moves all the dinos one cell down:
   // removeItem(dinoClass, dinosCurrentPosition)
   // dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-  //   return dinoPosition = dinoPosition + width
+  //   return dinoPosition += width
   // })
   // addItem(dinoClass, dinosCurrentPosition)
 
@@ -152,6 +194,26 @@ function keysGunAction(event) {
 
 }
 
+
+
+
+
+
+
+
+const missileAlreadyOnGrid = cells.forEach(cell => {
+  return cell.classList.includes(missileClass)
+})
+console.log(missileAlreadyOnGrid)
+
+// function handleMissile() {
+//   // if (cells.)
+//   const missileAlreadyOnGrid = cells.forEach(cell => {
+//     cell.classList.includes(missileClass)
+//   })
+//   console.log(missileAlreadyOnGrid)
+
+// }
 
 
   // cells[gunCurrentPosition].classList.add("gun")
