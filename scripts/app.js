@@ -27,6 +27,8 @@ const missileClass = "missile"
 let rockCurrentPosition // index number
 const rockClass = "rock"
 
+const exposionClass = "explosion"
+
 // Timer variables
 
 let dinosTimer
@@ -183,9 +185,10 @@ function keysGunAction(event) {
   } else if (key === 32) { // Space bar is key 32, if you want to change it to up arrow, up arrow is 38
     event.preventDefault()
     console.log("Space bar makes Gun fire Missile")
-    missileCurrentPosition = gunCurrentPosition - width
-    console.log(missileCurrentPosition, gunCurrentPosition)
-    addItem(missileClass, missileCurrentPosition)
+    handleMissile()
+    // missileCurrentPosition = gunCurrentPosition - width
+    // console.log(missileCurrentPosition, gunCurrentPosition)
+    // addItem(missileClass, missileCurrentPosition)
   } else {
     console.log("Key is invalid")
   }
@@ -198,22 +201,71 @@ function keysGunAction(event) {
 
 
 
+function handleMissile() {
+
+  let gridContainsMissile
+  cells.forEach(cell => { // Checks if there is already a missile present on the grid
+    if (cell.classList.contains(missileClass)) {
+      gridContainsMissile = true // if there is already a missile present on the grid, gridContainsMissile updates to true
+    }
+  })
+
+  if (gridContainsMissile === true) {
+    console.log("There is already a missile on the grid - one missile at a time")
+  } else {
+    missileCurrentPosition = gunCurrentPosition - width // This updates missileCurrentPosition to the index number one above the gun's current position
+    addItem(missileClass, missileCurrentPosition) // This displays the missile in its new position above the gun
+
+    missileTimer = setInterval(() => { // This setInterval loops and makes the missile appear to move up one cell every second, until it reaches the top of the grid
+
+      let missileDinoCollision
+      let cellIndexOfMissileDinoCollision
+      let indexOfCollisionCellInDinosCurrentPosition
+      cells.forEach(cell => { // Checks if there is a missile AND a dino present on the same cell on the grid
+        if (cell.classList.contains(missileClass) && cell.classList.contains(dinoClass)) {
+          missileDinoCollision = true // if there is a missile AND a dino present on the same cell on the grid, isThereAMissileDinoCollision updates to true
+          cellIndexOfMissileDinoCollision = cells.indexOf(cell) // This stores the grid index of the missile/dino collision in a variable
+          indexOfCollisionCellInDinosCurrentPosition = dinosCurrentPosition.indexOf(cellIndexOfMissileDinoCollision) // The cellIndexOfMissileDinoCollision is one of the numbers inside the dinosCurrentPosition array. This stores the index of its position in the dinosCurrentPosition array
+          console.log(cellIndexOfMissileDinoCollision)
+          console.log(indexOfCollisionCellInDinosCurrentPosition)
+        }
+      })
+
+      if (missileDinoCollision === true) { // If the missile collides with a dino, the missile is removed and the missileTimer is cleared
+        removeItem(missileClass, missileCurrentPosition) // Removes the missile class from the cell where collision occurred
+        cells[cellIndexOfMissileDinoCollision].classList.add(exposionClass)
+        setTimeout(() => {
+          cells[cellIndexOfMissileDinoCollision].classList.remove(exposionClass)
+        }, 1000)
+        // cells[cellIndexOfMissileDinoCollision].classList.remove(dinoClass) //! The 3 lines of code below do this job instead, so this line is now redundant. Removes the dino class from the cell where collision occurred
+        removeItem(dinoClass, dinosCurrentPosition)
+        dinosCurrentPosition.splice(indexOfCollisionCellInDinosCurrentPosition, 1) // Updates the dinosCurrentPosition array to reflect the missile collision deleting the dino
+        addItem(dinoClass, dinosCurrentPosition) // Displays updated dinosCurrentPosition array with collision dino deleted
+        score += 100 // This adds 100 to the score for destroying a dino //! Must also update innerText of HTML score element
+        clearInterval(missileTimer)
+      } else if (missileCurrentPosition < width) { // If the missile reaches the top of the grid, the missile is removed and the missileTimer is cleared
+        removeItem(missileClass, missileCurrentPosition)
+        clearInterval(missileTimer)
+      } else { // If the missile has not collided with a dino and is not yet at the top of the grid, the missile keeps moving up one cell at a time
+        removeItem(missileClass, missileCurrentPosition)
+        missileCurrentPosition -= width
+        addItem(missileClass, missileCurrentPosition)
+      }
+
+    }, missileSpeed)
+  }
+
+}
+
+// handleMissile()
 
 
 
-const missileAlreadyOnGrid = cells.forEach(cell => {
-  return cell.classList.includes(missileClass)
-})
-console.log(missileAlreadyOnGrid)
 
-// function handleMissile() {
-//   // if (cells.)
-//   const missileAlreadyOnGrid = cells.forEach(cell => {
-//     cell.classList.includes(missileClass)
-//   })
-//   console.log(missileAlreadyOnGrid)
 
-// }
+
+
+
 
 
   // cells[gunCurrentPosition].classList.add("gun")
