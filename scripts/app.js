@@ -20,8 +20,8 @@ const gunStartPosition = 104 // index number
 let gunCurrentPosition = 104 // index number
 const gunClass = "gun"
 
-const dinosStartPosition = [22, 23, 24] // array of index numbers - should be initialised at [26, 27, 28] for start of game
-let dinosCurrentPosition = [22, 23, 24] // array of index numbers
+const dinosStartPosition = [11, 12, 13] // array of index numbers - should be initialised at [26, 27, 28] for start of game
+let dinosCurrentPosition = [11, 12, 13] // array of index numbers
 const dinoClass = "dino"
 
 let missileCurrentPosition // index number
@@ -43,7 +43,7 @@ let rockTimer
 
 let dinosSpeed = 1000
 let rockSpeed = 1000
-let missileSpeed = 1000
+let missileSpeed = 200
 
 // Event Listeners
 
@@ -59,7 +59,7 @@ function startGame() {
 
   console.log("startGame() function called")
 
-  for (let i = 0; i < cellCount; i++) { // This block of code created the grid
+  for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
     const cell = document.createElement("div")
     cell.innerText = i
     grid.appendChild(cell)
@@ -70,21 +70,48 @@ function startGame() {
   addItem(gunClass, gunCurrentPosition)
   dinosCurrentPosition = dinosStartPosition
   addItem(dinoClass, dinosCurrentPosition) //! Formerly dinosStartPosition // I believe setting xCurrentPosition to xStartPosition in the lines immediately above may do the trick
-  rockCurrentPosition = 44
+  rockCurrentPosition = 44 //! Simply to test missile-rock collision functionality in handleMissile() function
   addItem(rockClass, rockCurrentPosition)
 
 
+  // let counter
 
   dinosTimer = setInterval(() => {
 
-    if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) || (dinosCurrentPosition[0] % width === 0)) {
+    if (dinosCurrentPosition[0] % width < (width - dinosStartPosition.length)) { // "If the index of the left-most dino is less than the remainder of width minus the length of the starting dinos array (number of dinos initially)"
+
       removeItem(dinoClass, dinosCurrentPosition)
       dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-        return dinoPosition += width
+        return dinoPosition += 1
       })
       addItem(dinoClass, dinosCurrentPosition)
-      clearInterval(dinosTimer)
+      console.log("Dinos move right")
+
+      // counter++
+      // if (counter > 10) {
+      //   clearInterval(dinosTimer)
+      //   counter = 0
+      // } else {
+      //   removeItem(dinoClass, dinosCurrentPosition)
+      //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+      //     return dinoPosition += 1
+      //   })
+      //   addItem(dinoClass, dinosCurrentPosition)
+      //   console.log("Dinos move right")
+      // }
+
+
+      // removeItem(dinoClass, dinosCurrentPosition)
+      // dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+      //   return dinoPosition += 1
+      // })
+      // addItem(dinoClass, dinosCurrentPosition)
+      // console.log("Dinos move right")
+      // clearInterval(dinosTimer)
     }
+    // else if ()
+
+
 
     // removeItem(dinoClass, dinosCurrentPosition)
     // dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { //? map returns a new array of equal length
@@ -251,7 +278,7 @@ function handleMissile() {
         cells[cellIndexOfMissileDinoCollision].classList.add(exposionClass)
         setTimeout(() => {
           cells[cellIndexOfMissileDinoCollision].classList.remove(exposionClass)
-        }, 1000)
+        }, 500)
         // cells[cellIndexOfMissileDinoCollision].classList.remove(dinoClass) //! The 3 lines of code below do this job instead, so this line is now redundant. Removes the dino class from the cell where collision occurred
         removeItem(dinoClass, dinosCurrentPosition)
         dinosCurrentPosition.splice(indexOfCollisionCellInDinosCurrentPosition, 1) // Updates the dinosCurrentPosition array to reflect the missile collision deleting the dino
@@ -264,13 +291,13 @@ function handleMissile() {
         cells[cellIndexOfMissileRockCollision].classList.add(exposionClass)
         setTimeout(() => {
           cells[cellIndexOfMissileRockCollision].classList.remove(exposionClass)
-        }, 1000)
+        }, 500)
         cells[cellIndexOfMissileRockCollision].classList.remove(rockClass)
         clearInterval(missileTimer)
       } else if (missileCurrentPosition < width) { // If the missile reaches the top of the grid, the missile is removed and the missileTimer is cleared
         removeItem(missileClass, missileCurrentPosition)
         clearInterval(missileTimer)
-      } else { // If the missile has not collided with a dino and is not yet at the top of the grid, the missile keeps moving up one cell at a time
+      } else { // If the missile has not collided with a dino or rock and is not yet at the top of the grid, the missile keeps moving up one cell at a time
         removeItem(missileClass, missileCurrentPosition)
         missileCurrentPosition -= width
         addItem(missileClass, missileCurrentPosition)
@@ -282,8 +309,6 @@ function handleMissile() {
 }
 
 
-
-//! Add some code to the handleMissile() function so that if the missile collides with the rock, the rock explodes?
 
 
 
