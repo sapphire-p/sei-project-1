@@ -226,13 +226,25 @@ function handleMissile() {
       let indexOfCollisionCellInDinosCurrentPosition
       cells.forEach(cell => { // Checks if there is a missile AND a dino present on the same cell on the grid
         if (cell.classList.contains(missileClass) && cell.classList.contains(dinoClass)) {
-          missileDinoCollision = true // if there is a missile AND a dino present on the same cell on the grid, isThereAMissileDinoCollision updates to true
+          missileDinoCollision = true // if there is a missile AND a dino present on the same cell on the grid, missileDinoCollision updates to true
           cellIndexOfMissileDinoCollision = cells.indexOf(cell) // This stores the grid index of the missile/dino collision in a variable
           indexOfCollisionCellInDinosCurrentPosition = dinosCurrentPosition.indexOf(cellIndexOfMissileDinoCollision) // The cellIndexOfMissileDinoCollision is one of the numbers inside the dinosCurrentPosition array. This stores the index of its position in the dinosCurrentPosition array
           console.log(cellIndexOfMissileDinoCollision)
           console.log(indexOfCollisionCellInDinosCurrentPosition)
         }
       })
+
+      let missileRockCollision
+      let cellIndexOfMissileRockCollision
+      cells.forEach(cell => { // Checks if there is a missile AND a rock present on the same cell on the grid
+        if (cell.classList.contains(missileClass) && cell.classList.contains(rockClass)) {
+          missileRockCollision = true // if there is a missile AND a rock present on the same cell on the grid, missileRockCollision updates to true
+          cellIndexOfMissileRockCollision = cells.indexOf(cell) // This stores the grid index of the missile/dino collision in a variable
+          //! indexOfCollisionCellInRockCurrentPosition = rockCurrentPosition.indexOf(cellIndexOfMissileRockCollision) // The variables specified here do not exist; do not think they need to
+          console.log(cellIndexOfMissileRockCollision)
+        }
+      })
+
 
       if (missileDinoCollision === true) { // If the missile collides with a dino, the missile is removed and the missileTimer is cleared
         removeItem(missileClass, missileCurrentPosition) // Removes the missile class from the cell where collision occurred
@@ -246,6 +258,14 @@ function handleMissile() {
         addItem(dinoClass, dinosCurrentPosition) // Displays updated dinosCurrentPosition array with collision dino deleted
         score += 100 // This adds 100 to the score for destroying a dino
         scoreDisplay.innerText = score
+        clearInterval(missileTimer)
+      } else if (missileRockCollision === true) {
+        removeItem(missileClass, missileCurrentPosition) // Removes the missile class from the cell where collision occurred
+        cells[cellIndexOfMissileRockCollision].classList.add(exposionClass)
+        setTimeout(() => {
+          cells[cellIndexOfMissileRockCollision].classList.remove(exposionClass)
+        }, 1000)
+        cells[cellIndexOfMissileRockCollision].classList.remove(rockClass)
         clearInterval(missileTimer)
       } else if (missileCurrentPosition < width) { // If the missile reaches the top of the grid, the missile is removed and the missileTimer is cleared
         removeItem(missileClass, missileCurrentPosition)
@@ -263,7 +283,7 @@ function handleMissile() {
 
 
 
-
+//! Add some code to the handleMissile() function so that if the missile collides with the rock, the rock explodes?
 
 
 
