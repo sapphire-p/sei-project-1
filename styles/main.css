@@ -74,3 +74,10 @@ body {
   background-repeat: no-repeat;
   background-size: contain;
 }
+
+
+.explosion {
+  background-image: url("../assets/Explosion.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
