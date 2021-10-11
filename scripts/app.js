@@ -154,8 +154,8 @@ function startGame() {
 
 
 
-  //? Try: splitting the 3 light green points below into 3 separate functions
-  //? Creating a sequence of callback functions to enable each action (right, left, down) to happen sequentially
+  //? Could split the 3 light green points below into 3 separate functions?
+  //? Creating a sequence of callback functions to enable each action (right, left, down) to happen sequentially?
 
 
   // dinosTimer = setInterval(() => { //* dinosTimer setInterval to control the movement of the dinos every dinosSpeed (1 second)
@@ -329,6 +329,65 @@ function handleMissile() {
   }
 
 }
+
+
+
+/* handleRock function */
+
+//? Periodically, a random dino (with no dino/missile/gun classes in the cell immediately below it) drops a rock down vertically
+// Similar to handleMissile() function, but instead of the trigger being space bar, it will be triggered by a timer interval in the startGame() function
+// Inside startGame() function, Timer interval needed to trigger rock drop - this would call handleRock function every x seconds
+// Inside handleRock function itself:
+// Identify an eligible dino (a dino index where the cell immediately below has no dino/missile/gun classes on it) at random from the dinosCurrentPosition array
+// Set a rockTimer setInterval for the rock to drop down in the cells below that dino
+// Determine if there is a Rock-Gun collision >> if so:
+//* Rock disappears
+//* Gun stays visible
+//* Short explosion visible making use of setTimeout?
+//* livesRemaining variable decrements
+//* livesDisplay innerText updates with new value of livesRemaining
+// Rock-Missile (missile-rock) collision should already be handled inside the handlemissile() function, but may need tweaking so that it clears the rockTimer setInterval
+// // Globally-scoped variable needed for: bombPosition, also addBomb and removeBomb functions
+
+
+function handleRock() {
+
+  rockTimer = setInterval(() => {
+
+    let dinosEligibleToThrowRock = []
+    let dinoToThrowRock
+
+
+    cells.forEach(cell => { // Checks if there is a missile AND a dino present on the same cell on the grid
+      if (cell.classList.contains(missileClass) && cell.classList.contains(dinoClass)) {
+        missileDinoCollision = true // if there is a missile AND a dino present on the same cell on the grid, missileDinoCollision updates to true
+        cellIndexOfMissileDinoCollision = cells.indexOf(cell) // This stores the grid index of the missile/dino collision in a variable
+        indexOfCollisionCellInDinosCurrentPosition = dinosCurrentPosition.indexOf(cellIndexOfMissileDinoCollision) // The cellIndexOfMissileDinoCollision is one of the numbers inside the dinosCurrentPosition array. This stores the index of its position in the dinosCurrentPosition array
+        console.log(cellIndexOfMissileDinoCollision)
+        console.log(indexOfCollisionCellInDinosCurrentPosition)
+      }
+    })
+
+
+    dinosCurrentPosition.forEach(dino => { // Checks dinosCurrentPosition for dino index where the cell immediately below has no dino/missile/gun classes on it
+      if (!cells[dino + width].classList.contains(dinoClass) && ) {
+
+      }
+    })
+
+
+  })
+
+}
+
+
+
+
+
+
+
+
+
 
 
 
