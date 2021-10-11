@@ -20,8 +20,9 @@ const gunStartPosition = 104 // index number
 let gunCurrentPosition = 104 // index number
 const gunClass = "gun"
 
-const dinosStartPosition = [11, 12, 13] // array of index numbers - should be initialised at [26, 27, 28] for start of game
-let dinosCurrentPosition = [11, 12, 13] // array of index numbers
+const dinosStartPosition = [14, 15, 16, 17, 18, 19, 26, 27, 28, 29, 38, 39] // array of index numbers - should be initialised at [26, 27, 28] for start of game
+let dinosCurrentPosition = [14, 15, 16, 17, 18, 19, 26, 27, 28, 29, 38, 39] // array of index numbers
+let dinosDirection = "right" // This variable stores the direction of movement of the dinos (initialised at "right")
 const dinoClass = "dino"
 
 let missileCurrentPosition // index number
@@ -74,81 +75,165 @@ function startGame() {
   addItem(rockClass, rockCurrentPosition)
 
 
-  let counter
 
   dinosTimer = setInterval(() => {
 
-    if (dinosCurrentPosition[0] % width < (width - dinosStartPosition.length)) { // "If the index of the left-most dino is less than the remainder of width minus the length of the starting dinos array (number of dinos initially)"
-      // if (dinosCurrentPosition[0] % width === 0) {
-      removeItem(dinoClass, dinosCurrentPosition)
-      dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-        return dinoPosition += 1
-      })
-      addItem(dinoClass, dinosCurrentPosition)
-      console.log("Dinos move right")
+    // If any dinos are on the left or right edge (use .some() array method to determine this), move dinos down and change direction (e.g. from right to left), Else:
+    // If direction (globally-scoped variable) is equal to "right" and no dinos are on the edge, move dinos right
+    // If direction (globally-scoped variable) is equal to "left" and no dinos are on the edge, move dinos right
 
-      // counter++
-      // if (counter > 10) {
-      //   clearInterval(dinosTimer)
-      //   counter = 0
-      // } else {
-      //   removeItem(dinoClass, dinosCurrentPosition)
-      //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-      //     return dinoPosition += 1
-      //   })
-      //   addItem(dinoClass, dinosCurrentPosition)
-      //   console.log("Dinos move right")
-      // }
+    let anyDinosOnTheEdge = dinosCurrentPosition.some(dino => {
+      return ((dino % width === width - 1) || (dino % width === 0))
+    })
 
+    console.log(anyDinosOnTheEdge)
 
-      // removeItem(dinoClass, dinosCurrentPosition)
-      // dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-      //   return dinoPosition += 1
-      // })
-      // addItem(dinoClass, dinosCurrentPosition)
-      // console.log("Dinos move right")
-      // clearInterval(dinosTimer)
-    } else if (dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1 && (dinosCurrentPosition[dinosCurrentPosition.length - 1] % 2 === 1)) {
-      counter++
-      removeItem(dinoClass, dinosCurrentPosition)
+    if (anyDinosOnTheEdge === true) { // If this is true, definitely go down, and then change direction
+
+      removeItem(dinoClass, dinosCurrentPosition) // go down
       dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
         return dinoPosition += width
       })
       addItem(dinoClass, dinosCurrentPosition)
-    } else if ((dinosCurrentPosition[dinosCurrentPosition.length - 1]) > (width - dinosStartPosition.length)) {
-      removeItem(dinoClass, dinosCurrentPosition)
-      dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-        return dinoPosition -= 1
-      })
-      addItem(dinoClass, dinosCurrentPosition)
-    } else if ((dinosCurrentPosition[0] / width) >= width - 1) { // "else if: the cell index of the left-most dino divided by width is greater than or equal to (width - 1), i.e. the left-most dino has reached the bottom row:"
-      clearInterval(dinosTimer)
+
+      if (dinosDirection === "right") {
+        // setTimeout(() => {
+        removeItem(dinoClass, dinosCurrentPosition)
+        dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+          return dinoPosition -= 1
+        })
+        addItem(dinoClass, dinosCurrentPosition)
+        dinosDirection = "left"
+        // }, 300)
+      } else if (dinosDirection === "left") {
+        // setTimeout(() => {
+        removeItem(dinoClass, dinosCurrentPosition)
+        dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+          return dinoPosition += 1
+        })
+        addItem(dinoClass, dinosCurrentPosition)
+        dinosDirection = "right"
+        // }, 300)
+      }
+
+    } else if (anyDinosOnTheEdge === false) {
+
+      if (dinosDirection === "right") {
+        removeItem(dinoClass, dinosCurrentPosition)
+        dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+          return dinoPosition += 1
+        })
+        addItem(dinoClass, dinosCurrentPosition)
+      } else if (dinosDirection === "left") {
+        removeItem(dinoClass, dinosCurrentPosition)
+        dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+          return dinoPosition -= 1
+        })
+        addItem(dinoClass, dinosCurrentPosition)
+      }
+
     }
 
-    // else if (counter = "odd number") //! ?
 
+    //     if (dinos are not on the edge) {
+    //   if (direction is right) {
+    //       go right
+    //   } else if (direction is left) {
+    //       go left
+    //   }
 
-
-    // removeItem(dinoClass, dinosCurrentPosition)
-    // dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { //? map returns a new array of equal length
-    //   return dinoPosition += 1 //? This updates the position of each dino to one cell to the right, by adding one to each dino index number
-    // })
-    // addItem(dinoClass, dinosCurrentPosition)
-
-
-
-    // if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) || (dinosCurrentPosition[0] % width === 0)) {
-    //   dinosTimer = setInterval(() => {
-    //     removeItem(dinoClass, dinosCurrentPosition)
-    //     dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-    //       return dinoPosition += width
-    //     })
-    //     addItem(dinoClass, dinosCurrentPosition)
-    //   }, dinosSpeed)
+    // } else if (dinos are on the edge) {
+    //     go down
+    //   if (direction is left) {
+    //       go right
+    //     switch direction to right
+    //   } else if (direction is right) {
+    //       go left
+    //     switch direction to left
+    //   }
     // }
 
 
   }, dinosSpeed)
+
+
+
+  //! Below: old attempts at the dinos movement logic inside "dinosTimer = setInterval(() => {  }":
+  //!
+  //!
+
+  // if (dinosCurrentPosition[0] % width < (width - dinosStartPosition.length)) { // "If the index of the left-most dino is less than the remainder of width minus the length of the starting dinos array (number of dinos initially)"
+  //   // if (dinosCurrentPosition[0] % width === 0) {
+  //   removeItem(dinoClass, dinosCurrentPosition)
+  //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+  //     return dinoPosition += 1
+  //   })
+  //   addItem(dinoClass, dinosCurrentPosition)
+  //   console.log("Dinos move right")
+
+  //   // counter++
+  //   // if (counter > 10) {
+  //   //   clearInterval(dinosTimer)
+  //   //   counter = 0
+  //   // } else {
+  //   //   removeItem(dinoClass, dinosCurrentPosition)
+  //   //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+  //   //     return dinoPosition += 1
+  //   //   })
+  //   //   addItem(dinoClass, dinosCurrentPosition)
+  //   //   console.log("Dinos move right")
+  //   // }
+
+
+  //   // removeItem(dinoClass, dinosCurrentPosition)
+  //   // dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+  //   //   return dinoPosition += 1
+  //   // })
+  //   // addItem(dinoClass, dinosCurrentPosition)
+  //   // console.log("Dinos move right")
+  //   // clearInterval(dinosTimer)
+  // } else if (dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1 && (dinosCurrentPosition[dinosCurrentPosition.length - 1] % 2 === 1)) {
+  //   counter++
+  //   removeItem(dinoClass, dinosCurrentPosition)
+  //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+  //     return dinoPosition += width
+  //   })
+  //   addItem(dinoClass, dinosCurrentPosition)
+  // } else if ((dinosCurrentPosition[dinosCurrentPosition.length - 1]) > (width - dinosStartPosition.length)) {
+  //   removeItem(dinoClass, dinosCurrentPosition)
+  //   dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+  //     return dinoPosition -= 1
+  //   })
+  //   addItem(dinoClass, dinosCurrentPosition)
+  // } else if ((dinosCurrentPosition[0] / width) >= width - 1) { // "else if: the cell index of the left-most dino divided by width is greater than or equal to (width - 1), i.e. the left-most dino has reached the bottom row:"
+  //   clearInterval(dinosTimer)
+  // }
+
+  // // else if (counter = "odd number") //! ?
+
+
+
+  // // removeItem(dinoClass, dinosCurrentPosition)
+  // // dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { //? map returns a new array of equal length
+  // //   return dinoPosition += 1 //? This updates the position of each dino to one cell to the right, by adding one to each dino index number
+  // // })
+  // // addItem(dinoClass, dinosCurrentPosition)
+
+
+
+  // // if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) || (dinosCurrentPosition[0] % width === 0)) {
+  // //   dinosTimer = setInterval(() => {
+  // //     removeItem(dinoClass, dinosCurrentPosition)
+  // //     dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+  // //       return dinoPosition += width
+  // //     })
+  // //     addItem(dinoClass, dinosCurrentPosition)
+  // //   }, dinosSpeed)
+  // // }
+
+  //!
+  //!
+  //! Above: old attempts at the dinos movement logic inside "dinosTimer = setInterval(() => {  }":
 
 
 
@@ -350,35 +435,36 @@ function handleMissile() {
 // // Globally-scoped variable needed for: bombPosition, also addBomb and removeBomb functions
 
 
-function handleRock() {
+// function handleRock() {
 
-  rockTimer = setInterval(() => {
+//   rockTimer = setInterval(() => {
 
-    let dinosEligibleToThrowRock = []
-    let dinoToThrowRock
-
-
-    cells.forEach(cell => { // Checks if there is a missile AND a dino present on the same cell on the grid
-      if (cell.classList.contains(missileClass) && cell.classList.contains(dinoClass)) {
-        missileDinoCollision = true // if there is a missile AND a dino present on the same cell on the grid, missileDinoCollision updates to true
-        cellIndexOfMissileDinoCollision = cells.indexOf(cell) // This stores the grid index of the missile/dino collision in a variable
-        indexOfCollisionCellInDinosCurrentPosition = dinosCurrentPosition.indexOf(cellIndexOfMissileDinoCollision) // The cellIndexOfMissileDinoCollision is one of the numbers inside the dinosCurrentPosition array. This stores the index of its position in the dinosCurrentPosition array
-        console.log(cellIndexOfMissileDinoCollision)
-        console.log(indexOfCollisionCellInDinosCurrentPosition)
-      }
-    })
+//     let dinosEligibleToThrowRock = []
+//     let dinoToThrowRock
 
 
-    dinosCurrentPosition.forEach(dino => { // Checks dinosCurrentPosition for dino index where the cell immediately below has no dino/missile/gun classes on it
-      if (!cells[dino + width].classList.contains(dinoClass) && ) {
+//     cells.forEach(cell => { // Checks if there is a missile AND a dino present on the same cell on the grid
+//       if (cell.classList.contains(missileClass) && cell.classList.contains(dinoClass)) {
+//         missileDinoCollision = true // if there is a missile AND a dino present on the same cell on the grid, missileDinoCollision updates to true
+//         cellIndexOfMissileDinoCollision = cells.indexOf(cell) // This stores the grid index of the missile/dino collision in a variable
+//         indexOfCollisionCellInDinosCurrentPosition = dinosCurrentPosition.indexOf(cellIndexOfMissileDinoCollision) // The cellIndexOfMissileDinoCollision is one of the numbers inside the dinosCurrentPosition array. This stores the index of its position in the dinosCurrentPosition array
+//         console.log(cellIndexOfMissileDinoCollision)
+//         console.log(indexOfCollisionCellInDinosCurrentPosition)
+//       }
+//     })
 
-      }
-    })
+
+//     dinosCurrentPosition.forEach(dino => { // Checks dinosCurrentPosition for dino index where the cell immediately below has no dino/missile/gun classes on it
+//       if (!cells[dino + width].classList.contains(dinoClass) && !cells[dino + width].classList.contains(missileClass) && !cells[dino + width].classList.contains(gunClass)) {
+//         dinosEligibleToThrowRock.push(dino)
+//         console.log(dinosEligibleToThrowRock)
+//       }
+//     })
 
 
-  })
+//   }, rockSpeed)
 
-}
+// }
 
 
 
