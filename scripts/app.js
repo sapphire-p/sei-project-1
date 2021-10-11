@@ -32,7 +32,7 @@ const missileClass = "missile"
 let rockCurrentPosition // index number
 const rockClass = "rock"
 
-const exposionClass = "explosion"
+const explosionClass = "explosion"
 
 // Timer variables
 
@@ -362,9 +362,9 @@ function handleMissile() {
 
       if (missileDinoCollision === true) { // If the missile collides with a dino, the missile is removed and the missileTimer is cleared
         removeItem(missileClass, missileCurrentPosition) // Removes the missile class from the cell where collision occurred
-        cells[cellIndexOfMissileDinoCollision].classList.add(exposionClass)
+        cells[cellIndexOfMissileDinoCollision].classList.add(explosionClass)
         setTimeout(() => {
-          cells[cellIndexOfMissileDinoCollision].classList.remove(exposionClass)
+          cells[cellIndexOfMissileDinoCollision].classList.remove(explosionClass)
         }, 400)
         // cells[cellIndexOfMissileDinoCollision].classList.remove(dinoClass) //! The 3 lines of code below do this job instead, so this line is now redundant. Removes the dino class from the cell where collision occurred
         removeItem(dinoClass, dinosCurrentPosition)
@@ -375,9 +375,9 @@ function handleMissile() {
         clearInterval(missileTimer)
       } else if (missileRockCollision === true) {
         removeItem(missileClass, missileCurrentPosition) // Removes the missile class from the cell where collision occurred
-        cells[cellIndexOfMissileRockCollision].classList.add(exposionClass)
+        cells[cellIndexOfMissileRockCollision].classList.add(explosionClass)
         setTimeout(() => {
-          cells[cellIndexOfMissileRockCollision].classList.remove(exposionClass)
+          cells[cellIndexOfMissileRockCollision].classList.remove(explosionClass)
         }, 400)
         cells[cellIndexOfMissileRockCollision].classList.remove(rockClass)
         clearInterval(missileTimer)
