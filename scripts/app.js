@@ -23,6 +23,7 @@ const gunClass = "gun"
 const dinosStartPosition = [14, 15, 16, 17, 18, 19, 26, 27, 28, 29, 38, 39] // array of index numbers - should be initialised at [26, 27, 28] for start of game
 let dinosCurrentPosition = [14, 15, 16, 17, 18, 19, 26, 27, 28, 29, 38, 39] // array of index numbers
 let dinosDirection = "right" // This variable stores the direction of movement of the dinos (initialised at "right")
+let dinoCounter // a variable added to help control the movement of the dinos so that when they move down, they only move down one cell
 const dinoClass = "dino"
 
 let missileCurrentPosition // index number
@@ -82,56 +83,35 @@ function startGame() {
     // If direction (globally-scoped variable) is equal to "right" and no dinos are on the edge, move dinos right
     // If direction (globally-scoped variable) is equal to "left" and no dinos are on the edge, move dinos right
 
-    let anyDinosOnTheEdge = dinosCurrentPosition.some(dino => {
+    const anyDinosOnTheEdge = dinosCurrentPosition.some(dino => {
       return ((dino % width === width - 1) || (dino % width === 0))
     })
 
     console.log(anyDinosOnTheEdge)
 
-    if (anyDinosOnTheEdge === true) { // If this is true, definitely go down, and then change direction
-
+    if (anyDinosOnTheEdge && !dinoCounter) { // If any dinos are on the edge, definitely *go down*, and then *change direction and move one in the new direction*
+      // Remember, on the line above, since 'anyDinosOnTheEdge' will either be a boolean true or false, you do not need to write 'anyDinosOnTheEdge === true'
+      dinoCounter++
       removeItem(dinoClass, dinosCurrentPosition) // go down
       dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
         return dinoPosition += width
       })
+      dinosDirection = dinosDirection === 'right' ? 'left' : 'right'
       addItem(dinoClass, dinosCurrentPosition)
-
-      if (dinosDirection === "right") {
-        // setTimeout(() => {
-        removeItem(dinoClass, dinosCurrentPosition)
-        dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-          return dinoPosition -= 1
-        })
-        addItem(dinoClass, dinosCurrentPosition)
-        dinosDirection = "left"
-        // }, 300)
-      } else if (dinosDirection === "left") {
-        // setTimeout(() => {
-        removeItem(dinoClass, dinosCurrentPosition)
-        dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-          return dinoPosition += 1
-        })
-        addItem(dinoClass, dinosCurrentPosition)
-        dinosDirection = "right"
-        // }, 300)
-      }
-
-    } else if (anyDinosOnTheEdge === false) {
-
-      if (dinosDirection === "right") {
-        removeItem(dinoClass, dinosCurrentPosition)
-        dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-          return dinoPosition += 1
-        })
-        addItem(dinoClass, dinosCurrentPosition)
-      } else if (dinosDirection === "left") {
-        removeItem(dinoClass, dinosCurrentPosition)
-        dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-          return dinoPosition -= 1
-        })
-        addItem(dinoClass, dinosCurrentPosition)
-      }
-
+    } else if (dinosDirection === 'left') {
+      dinoCounter = 0
+      removeItem(dinoClass, dinosCurrentPosition)
+      dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+        return dinoPosition -= 1
+      })
+      addItem(dinoClass, dinosCurrentPosition)
+    } else if (dinosDirection === 'right') {
+      dinoCounter = 0
+      removeItem(dinoClass, dinosCurrentPosition)
+      dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+        return dinoPosition += 1
+      })
+      addItem(dinoClass, dinosCurrentPosition)
     }
 
 
