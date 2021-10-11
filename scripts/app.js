@@ -34,6 +34,20 @@ const rockClass = "rock"
 
 const explosionClass = "explosion"
 
+
+// Collision variables //? These are all locally-scoped inside functions
+
+// let missileDinoCollision
+// let cellIndexOfMissileDinoCollision
+// let indexOfCollisionCellInDinosCurrentPosition
+
+// let missileRockCollision
+// let cellIndexOfMissileRockCollision
+
+// let rockGunCollision
+// let cellIndexOfRockGunCollision
+
+
 // Timer variables
 
 let dinosTimer
@@ -44,7 +58,7 @@ let rockTimer
 // Speed variables
 
 let dinosSpeed = 1500
-let rockSpeed = 400 // 700 or 500 previously
+let rockSpeed = 700 // 700 or 500 previously
 let missileSpeed = 400 // 200 previously
 
 // Event Listeners
@@ -68,6 +82,9 @@ function startGame() {
     cells.push(cell)
   }
 
+  scoreDisplay.innerText = score
+  livesDisplay.innerText = livesRemaining
+
   gunCurrentPosition = gunStartPosition
   addItem(gunClass, gunCurrentPosition)
   dinosCurrentPosition = dinosStartPosition
@@ -78,32 +95,32 @@ function startGame() {
   dinosTimer = setInterval(() => {
 
     // If any dinos are on the left or right edge (use .some() array method to determine this), move dinos down and change direction (e.g. from right to left), Else:
-    // If direction (globally-scoped variable) is equal to "right" and no dinos are on the edge, move dinos right
-    // If direction (globally-scoped variable) is equal to "left" and no dinos are on the edge, move dinos right
+    // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "left", move dinos left
+    // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "right", move dinos right
 
-    const anyDinosOnTheEdge = dinosCurrentPosition.some(dino => {
+    const anyDinosOnTheEdge = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the left or right edge of the grid
       return ((dino % width === width - 1) || (dino % width === 0))
     })
 
     console.log(anyDinosOnTheEdge)
 
-    if (anyDinosOnTheEdge && !dinoCounter) { // If any dinos are on the edge, definitely *go down*, and then *change direction and move one in the new direction*
+    if (anyDinosOnTheEdge && !dinoCounter) { // If any dinos are on the edge AND dinoCounter is not indicating (with a truthy 1) that a down movement has just been performed, *go down*, and then *change direction and move one sideways*
       // Remember, on the line above, since 'anyDinosOnTheEdge' will either be a boolean true or false, you do not need to write 'anyDinosOnTheEdge === true'
       dinoCounter++
-      removeItem(dinoClass, dinosCurrentPosition) // go down
+      removeItem(dinoClass, dinosCurrentPosition) // -*go down*
       dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
         return dinoPosition += width
       })
-      dinosDirection = dinosDirection === 'right' ? 'left' : 'right'
+      dinosDirection = dinosDirection === 'right' ? 'left' : 'right' // -*change direction and move one sideways* // ternary operator that switches the value of dinosDirection (from right to left, or else left to right)
       addItem(dinoClass, dinosCurrentPosition)
-    } else if (dinosDirection === 'left') {
+    } else if (dinosDirection === 'left') { // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "left", move dinos left
       dinoCounter = 0
       removeItem(dinoClass, dinosCurrentPosition)
       dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
         return dinoPosition -= 1
       })
       addItem(dinoClass, dinosCurrentPosition)
-    } else if (dinosDirection === 'right') {
+    } else if (dinosDirection === 'right') { // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "right", move dinos right
       dinoCounter = 0
       removeItem(dinoClass, dinosCurrentPosition)
       dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
