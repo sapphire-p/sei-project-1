@@ -17,16 +17,18 @@ const livesDisplay = document.querySelector(".lives-display")
 // Gun, Dinos, Missile, Rock position and class variables
 
 const gunStartPosition = 104 // index number
-let gunCurrentPosition = 104 // index number
+let gunCurrentPosition // = 104 // index number
 const gunClass = "gun"
 
 const dinosStartPosition = [4, 5, 6, 14, 15, 16, 17, 18, 24, 25, 26, 27, 28, 29, 30, 36, 37, 39, 40] // array of index numbers - 19 dinos for start of game
-let dinosCurrentPosition = [4, 5, 6, 14, 15, 16, 17, 18, 24, 25, 26, 27, 28, 29, 30, 36, 37, 39, 40] // array of index numbers
+let dinosCurrentPosition // = [4, 5, 6, 14, 15, 16, 17, 18, 24, 25, 26, 27, 28, 29, 30, 36, 37, 39, 40] // array of index numbers
 // Old dinosaur formation array: [4, 5, 6, 14, 15, 16, 17, 18, 24, 25, 26, 27, 28, 29, 30, 36, 37, 38, 39, 40, 48, 50] of 22 dinos
 
 let dinosDirection = "right" // This variable stores the direction of movement of the dinos (initialised at "right")
 let dinoCounter // a variable added to help control the movement of the dinos so that when they move down, they only move down one cell
 const dinoClass = "dino"
+
+// let anyDinosAtBottom
 
 let missileCurrentPosition // index number
 const missileClass = "missile"
@@ -56,14 +58,18 @@ const fenceClass = "fence"
 
 let dinosTimer
 let missileTimer
-let rockLaunchTimer
+// let rockThrowTimer //! not needed - handlRock function is called within dinosTimer
 let rockTimer
+
 
 // Speed variables
 
-let dinosSpeed = 1500
+let dinosSpeed = 500
 let rockSpeed = 700 // 700 or 500 previously
-let missileSpeed = 400 // 200 previously
+let missileSpeed = 200 // 200 previously
+let explosionSpeed = 300
+// let rockThrowFrequency = 500 //! not needed - handlRock function is called within dinosTimer
+
 
 // Event Listeners
 
@@ -74,6 +80,7 @@ document.addEventListener('keyup', keysGunAction)
 
 
 
+/* startGame function */
 
 function startGame() {
 
@@ -82,7 +89,7 @@ function startGame() {
   for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
     const cell = document.createElement("div")
     cell.innerText = i
-    if (i > (width * width - (width + 1))) {
+    if (i > (width * width - (width + 1))) { // This adds a class of fence to the bottom row of the grid
       cell.classList.add(fenceClass)
     }
     grid.appendChild(cell)
@@ -101,90 +108,81 @@ function startGame() {
 
   dinosTimer = setInterval(() => {
 
-    // if ((width * width) - dinosCurrentPosition <= width) { // If the dinos reach the bottom of the grid, the dinos are removed, the dinosTimer is cleared and endGame() function is called
-    //   removeItem(rockClass, rockCurrentPosition)
-    //   clearInterval(rockTimer)
-
-    // If any dinos are on the left or right edge (use .some() array method to determine this), move dinos down and change direction (e.g. from right to left), Else:
-    // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "left", move dinos left
-    // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "right", move dinos right
-
-    const anyDinosOnTheEdge = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the left or right edge of the grid
-      return ((dino % width === width - 1) || (dino % width === 0))
+    const anyDinosAtBottom = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the bottom row of the grid
+      return (((width * width) - dino) <= width)
     })
+    console.log(anyDinosAtBottom)
 
-    console.log(anyDinosOnTheEdge)
+    if (anyDinosAtBottom) { // If the dinos reach the bottom of the grid, the dinos are removed, the dinosTimer is cleared and endGame() function is called
 
-    if (anyDinosOnTheEdge && !dinoCounter) { // If any dinos are on the edge AND dinoCounter is not indicating (with a truthy 1) that a down movement has just been performed, *go down*, and then *change direction and move one sideways*
-      // Remember, on the line above, since 'anyDinosOnTheEdge' will either be a boolean true or false, you do not need to write 'anyDinosOnTheEdge === true'
-      dinoCounter++
-      removeItem(dinoClass, dinosCurrentPosition) // -*go down*
-      dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-        return dinoPosition += width
+      console.log("dinos at bottom of grid")
+
+      // removeItem(dinoClass, dinosCurrentPosition)
+      // removeItem(gunClass, gunCurrentPosition)
+      // removeItem(rockClass, rockCurrentPosition)
+
+      // removeItem(missileClass, missileCurrentPosition)
+      clearInterval(dinosTimer)
+      clearInterval(missileTimer)
+      clearInterval(rockTimer)
+      //! What to do if the dinos reach the bottom of the grid, but livesRemaining is not 0?
+      endGame()
+
+    } else {
+      // If any dinos are on the left or right edge (use .some() array method to determine this), move dinos down and change direction (e.g. from right to left), Else:
+      // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "left", move dinos left
+      // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "right", move dinos right
+
+      const anyDinosOnTheEdge = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the left or right edge of the grid
+        return ((dino % width === width - 1) || (dino % width === 0))
       })
-      dinosDirection = dinosDirection === 'right' ? 'left' : 'right' // -*change direction and move one sideways* // ternary operator that switches the value of dinosDirection (from right to left, or else left to right)
-      addItem(dinoClass, dinosCurrentPosition)
-    } else if (dinosDirection === 'left') { // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "left", move dinos left
-      dinoCounter = 0
-      removeItem(dinoClass, dinosCurrentPosition)
-      dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-        return dinoPosition -= 1
-      })
-      addItem(dinoClass, dinosCurrentPosition)
-    } else if (dinosDirection === 'right') { // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "right", move dinos right
-      dinoCounter = 0
-      removeItem(dinoClass, dinosCurrentPosition)
-      dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-        return dinoPosition += 1
-      })
-      addItem(dinoClass, dinosCurrentPosition)
+
+      if (anyDinosOnTheEdge && !dinoCounter) { // If any dinos are on the edge AND dinoCounter is not indicating (with a truthy 1) that a down movement has just been performed, *go down*, and then *change direction and move one sideways*
+        // Remember, on the line above, since 'anyDinosOnTheEdge' will either be a boolean true or false, you do not need to write 'anyDinosOnTheEdge === true'
+        dinoCounter++
+        removeItem(dinoClass, dinosCurrentPosition) // -*go down*
+        dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+          return dinoPosition += width
+        })
+        dinosDirection = dinosDirection === 'right' ? 'left' : 'right' // -*change direction and move one sideways* // ternary operator that switches the value of dinosDirection (from right to left, or else left to right)
+        addItem(dinoClass, dinosCurrentPosition)
+      } else if (dinosDirection === 'left') { // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "left", move dinos left
+        dinoCounter = 0
+        removeItem(dinoClass, dinosCurrentPosition)
+        dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+          return dinoPosition -= 1
+        })
+        addItem(dinoClass, dinosCurrentPosition)
+      } else if (dinosDirection === 'right') { // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "right", move dinos right
+        dinoCounter = 0
+        removeItem(dinoClass, dinosCurrentPosition)
+        dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+          return dinoPosition += 1
+        })
+        addItem(dinoClass, dinosCurrentPosition)
+      }
+
+      handleRock()
+
     }
 
-    handleRock()
-
   }, dinosSpeed)
+
+  // rockThrowTimer = setInterval(() => {
+  //   handleRock()
+  // }, rockThrowFrequency)
 
 }
 
 
-//!
-//!
-//? Some code snippets to help with dinos movement functionality:
 
-// dinosTimer = setInterval(() => { //* dinosTimer setInterval to control the movement of the dinos every dinosSpeed (1 second)
-// }, dinosSpeed)
+/* endGame function */
 
-// if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) || (dinosCurrentPosition[0] % width === 0)) //* This conditional logic states: "If: last dino is in the right-most cell of the grid *OR* first dino is in the left-most cell of the grid"
-
-// if (dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) //* This conditional logic states: "If: last dino is in the right-most cell of the grid"
-
-// if (dinosCurrentPosition[0] % width === 0) //* This conditional logic states: "If: first dino is in the left-most cell of the grid"
-
-//* This moves all the dinos one cell to the right:
-// removeItem(dinoClass, dinosCurrentPosition)
-// dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { //? map returns a new array of equal length
-//   return dinoPosition += 1 //? This updates the position of each dino to one cell to the right, by adding one to each dino index number
-// })
-// addItem(dinoClass, dinosCurrentPosition)
-
-//* This moves all the dinos one cell to the left:
-// removeItem(dinoClass, dinosCurrentPosition)
-// dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-//   return dinoPosition -= 1
-// })
-// addItem(dinoClass, dinosCurrentPosition)
-
-
-//* This moves all the dinos one cell down:
-// removeItem(dinoClass, dinosCurrentPosition)
-// dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-//   return dinoPosition += width
-// })
-// addItem(dinoClass, dinosCurrentPosition)
-//!
-//!
-
-
+function endGame() {
+  clearInterval(dinosTimer)
+  clearInterval(missileTimer)
+  clearInterval(rockTimer)
+}
 
 
 
@@ -226,14 +224,14 @@ function keysGunAction(event) {
   removeItem(gunClass, gunCurrentPosition)
 
   if (key === 39 && gunCurrentPosition !== (width * width) - (width + 1)) {
-    console.log("Gun moves RIGHT")
+    // console.log("Gun moves RIGHT")
     gunCurrentPosition++
   } else if (key === 37 && gunCurrentPosition !== width * (width - 2)) {
-    console.log("Gun moves LEFT")
+    // console.log("Gun moves LEFT")
     gunCurrentPosition--
   } else if (key === 32) { // Space bar is key 32, if you want to change it to up arrow, up arrow is 38
     event.preventDefault()
-    console.log("Space bar makes Gun fire Missile")
+    // console.log("Space bar makes Gun fire Missile")
     handleMissile()
   } else {
     console.log("Key is invalid")
@@ -258,7 +256,8 @@ function handleMissile() {
   })
 
   if (gridContainsMissile === true) {
-    console.log("There is already a missile on the grid - one missile at a time")
+    // console.log("There is already a missile on the grid - one missile at a time")
+    return
   } else {
     missileCurrentPosition = gunCurrentPosition - width // This updates missileCurrentPosition to the index number one above the gun's current position
     addItem(missileClass, missileCurrentPosition) // This displays the missile in its new position above the gun
@@ -289,13 +288,12 @@ function handleMissile() {
         }
       })
 
-
       if (missileDinoCollision === true) { // If the missile collides with a dino, the missile is removed and the missileTimer is cleared
         removeItem(missileClass, missileCurrentPosition) // Removes the missile class from the cell where collision occurred
         cells[cellIndexOfMissileDinoCollision].classList.add(explosionClass)
         setTimeout(() => {
           cells[cellIndexOfMissileDinoCollision].classList.remove(explosionClass)
-        }, 400)
+        }, explosionSpeed)
         cells[cellIndexOfMissileDinoCollision].classList.remove(dinoClass) //! The 3 lines of code below do this job instead, so this line is now redundant. Removes the dino class from the cell where collision occurred
         removeItem(dinoClass, dinosCurrentPosition) // Removes the dino class from the cell where collision occurred
         dinosCurrentPosition.splice(indexOfCollisionCellInDinosCurrentPosition, 1) // Updates the dinosCurrentPosition array to reflect the missile collision deleting the dino
@@ -309,7 +307,7 @@ function handleMissile() {
         cells[cellIndexOfMissileRockCollision].classList.add(explosionClass)
         setTimeout(() => {
           cells[cellIndexOfMissileRockCollision].classList.remove(explosionClass)
-        }, 300)
+        }, explosionSpeed)
         clearInterval(missileTimer)
         clearInterval(rockTimer) //! This should clear the rockTimer and avoid any rocks continuing to fall after missile-rock collision, but sometimes the missiles do not stop the rocks - may be to do with a discrepancy between the handleMissile() function timing and the handleRock() function timing
       } else if (missileCurrentPosition < width) { // If the missile reaches the top of the grid, the missile is removed and the missileTimer is cleared
@@ -357,11 +355,12 @@ function handleRock() {
   })
 
   if (gridContainsRock === true) {
-    console.log("There is already a rock on the grid - one rock at a time") //! Could simply change to 'return' to exit the handleRock() function
+    // console.log("There is already a rock on the grid - one rock at a time") //! Could simply change to 'return' to exit the handleRock() function
+    return
   } else { // identify dinos eligible to throw a rock, randomly select one and position the rock in the cell below it, before starting the rockTimer
     let dinosEligibleToThrowRock = []
     dinosCurrentPosition.forEach(dino => { // Checks dinosCurrentPosition for dino index where the cell immediately below has no dino/missile/gun classes on it
-      if (!cells[dino + width].classList.contains(dinoClass) && !cells[dino + width].classList.contains(missileClass) && !cells[dino + width].classList.contains(gunClass)) {
+      if (!cells[dino + width].classList.contains(dinoClass) && !cells[dino + width].classList.contains(missileClass) && !cells[dino + width].classList.contains(gunClass)) { //! Throwing errors when dinos reach bottom of grid
         dinosEligibleToThrowRock.push(dino)
       }
     })
@@ -392,7 +391,7 @@ function handleRock() {
         cells[cellIndexOfRockGunCollision].classList.add(explosionClass)
         setTimeout(() => {
           cells[cellIndexOfRockGunCollision].classList.remove(explosionClass)
-        }, 1000)
+        }, explosionSpeed)
         livesRemaining -= 1 // This decrements the livesRemaining variable as the gun has been hit by a rock
         livesDisplay.innerText = livesRemaining
         if (livesRemaining < 1) { // This calls the endGame() function if livesRemaining has now dropped below 1
@@ -423,6 +422,44 @@ function handleRock() {
 
 
 
+
+
+//!
+//!
+//? Some code snippets to help with dinos movement functionality:
+
+// dinosTimer = setInterval(() => { //* dinosTimer setInterval to control the movement of the dinos every dinosSpeed (1 second)
+// }, dinosSpeed)
+
+// if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) || (dinosCurrentPosition[0] % width === 0)) //* This conditional logic states: "If: last dino is in the right-most cell of the grid *OR* first dino is in the left-most cell of the grid"
+
+// if (dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) //* This conditional logic states: "If: last dino is in the right-most cell of the grid"
+
+// if (dinosCurrentPosition[0] % width === 0) //* This conditional logic states: "If: first dino is in the left-most cell of the grid"
+
+//* This moves all the dinos one cell to the right:
+// removeItem(dinoClass, dinosCurrentPosition)
+// dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { //? map returns a new array of equal length
+//   return dinoPosition += 1 //? This updates the position of each dino to one cell to the right, by adding one to each dino index number
+// })
+// addItem(dinoClass, dinosCurrentPosition)
+
+//* This moves all the dinos one cell to the left:
+// removeItem(dinoClass, dinosCurrentPosition)
+// dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+//   return dinoPosition -= 1
+// })
+// addItem(dinoClass, dinosCurrentPosition)
+
+
+//* This moves all the dinos one cell down:
+// removeItem(dinoClass, dinosCurrentPosition)
+// dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+//   return dinoPosition += width
+// })
+// addItem(dinoClass, dinosCurrentPosition)
+//!
+//!
 
 
 
