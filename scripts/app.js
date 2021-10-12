@@ -28,7 +28,7 @@ let dinosDirection = "right" // This variable stores the direction of movement o
 let dinoCounter // a variable added to help control the movement of the dinos so that when they move down, they only move down one cell
 const dinoClass = "dino"
 
-// let anyDinosAtBottom
+let anyDinosAtBottom
 
 let missileCurrentPosition // index number
 const missileClass = "missile"
@@ -108,7 +108,7 @@ function startGame() {
 
   dinosTimer = setInterval(() => {
 
-    const anyDinosAtBottom = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the bottom row of the grid
+    anyDinosAtBottom = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the bottom row of the grid
       return (((width * width) - dino) <= width)
     })
     console.log(anyDinosAtBottom)
@@ -354,13 +354,13 @@ function handleRock() {
     }
   })
 
-  if (gridContainsRock === true) {
+  if (gridContainsRock === true || anyDinosAtBottom) { // if there is already a rock on the grid OR there are anyDinosAtBottom //! Has potentially solved the problem around 6 lines below - see *
     // console.log("There is already a rock on the grid - one rock at a time") //! Could simply change to 'return' to exit the handleRock() function
     return
   } else { // identify dinos eligible to throw a rock, randomly select one and position the rock in the cell below it, before starting the rockTimer
     let dinosEligibleToThrowRock = []
     dinosCurrentPosition.forEach(dino => { // Checks dinosCurrentPosition for dino index where the cell immediately below has no dino/missile/gun classes on it
-      if (!cells[dino + width].classList.contains(dinoClass) && !cells[dino + width].classList.contains(missileClass) && !cells[dino + width].classList.contains(gunClass)) { //! Throwing errors when dinos reach bottom of grid
+      if (!cells[dino + width].classList.contains(dinoClass) && !cells[dino + width].classList.contains(missileClass) && !cells[dino + width].classList.contains(gunClass)) { //! * Potentially solved: Throwing errors when dinos reach bottom of grid
         dinosEligibleToThrowRock.push(dino)
       }
     })
