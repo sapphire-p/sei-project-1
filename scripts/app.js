@@ -20,8 +20,10 @@ const gunStartPosition = 104 // index number
 let gunCurrentPosition = 104 // index number
 const gunClass = "gun"
 
-const dinosStartPosition = [14, 15, 16, 17, 18, 19, 26, 27, 28, 29, 38, 39] // array of index numbers - should be initialised at [26, 27, 28] for start of game
-let dinosCurrentPosition = [14, 15, 16, 17, 18, 19, 26, 27, 28, 29, 38, 39] // array of index numbers
+const dinosStartPosition = [4, 5, 6, 14, 15, 16, 17, 18, 24, 25, 26, 27, 28, 29, 30, 36, 37, 39, 40] // array of index numbers - 19 dinos for start of game
+let dinosCurrentPosition = [4, 5, 6, 14, 15, 16, 17, 18, 24, 25, 26, 27, 28, 29, 30, 36, 37, 39, 40] // array of index numbers
+// Old dinosaur formation array: [4, 5, 6, 14, 15, 16, 17, 18, 24, 25, 26, 27, 28, 29, 30, 36, 37, 38, 39, 40, 48, 50] of 22 dinos
+
 let dinosDirection = "right" // This variable stores the direction of movement of the dinos (initialised at "right")
 let dinoCounter // a variable added to help control the movement of the dinos so that when they move down, they only move down one cell
 const dinoClass = "dino"
@@ -98,6 +100,10 @@ function startGame() {
   // addItem(rockClass, rockCurrentPosition) //! Simply to test missile-rock collision functionality in handleMissile() function
 
   dinosTimer = setInterval(() => {
+
+    // if ((width * width) - dinosCurrentPosition <= width) { // If the dinos reach the bottom of the grid, the dinos are removed, the dinosTimer is cleared and endGame() function is called
+    //   removeItem(rockClass, rockCurrentPosition)
+    //   clearInterval(rockTimer)
 
     // If any dinos are on the left or right edge (use .some() array method to determine this), move dinos down and change direction (e.g. from right to left), Else:
     // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "left", move dinos left
