@@ -40,7 +40,7 @@ body {
 
 .end-screen-container {
   /* change display: to 'flex' when you want start-screen-container to be visible */
-  display: flex;
+  display: none;
   background: pink;
   z-index: 2;
 }

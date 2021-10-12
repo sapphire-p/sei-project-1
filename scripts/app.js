@@ -29,6 +29,7 @@ let dinoCounter // a variable added to help control the movement of the dinos so
 const dinoClass = "dino"
 
 let anyDinosAtBottom
+let anyDinosOnPenultimateRow
 
 let missileCurrentPosition // index number
 const missileClass = "missile"
@@ -64,7 +65,7 @@ let rockTimer
 
 // Speed variables
 
-let dinosSpeed = 500
+let dinosSpeed = 100 // 1500 usually
 let rockSpeed = 700 // 700 or 500 previously
 let missileSpeed = 200 // 200 previously
 let explosionSpeed = 300
@@ -74,23 +75,24 @@ let explosionSpeed = 300
 // Event Listeners
 
 const startButton = document.querySelector(".start-button")
-// startButton.addEventListener("click", startGame) //? Remember to turn this on again after styling grid in CSS!
+startButton.addEventListener("click", startGame) //? Comment this out to style the grid in CSS!
 
 document.addEventListener('keyup', keysGunAction)
 
 
 
-/* startGame function */ //!
+/* startGame function */ //! 
 
-for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
-  const cell = document.createElement("div")
-  cell.innerText = i
-  if (i > (width * width - (width + 1))) { // This adds a class of fence to the bottom row of the grid
-    cell.classList.add(fenceClass)
-  }
-  grid.appendChild(cell)
-  cells.push(cell)
-}
+//? Comment this in to style the grid in CSS!
+// for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
+//   const cell = document.createElement("div")
+//   cell.innerText = i
+//   if (i > (width * width - (width + 1))) { // This adds a class of fence to the bottom row of the grid
+//     cell.classList.add(fenceClass)
+//   }
+//   grid.appendChild(cell)
+//   cells.push(cell)
+// }
 
 // startGame() //!
 
@@ -123,7 +125,13 @@ function startGame() {
     anyDinosAtBottom = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the bottom row of the grid
       return (((width * width) - dino) <= width)
     })
-    console.log(anyDinosAtBottom)
+    console.log("anyDinosAtBottom", anyDinosAtBottom)
+
+    anyDinosOnPenultimateRow = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the bottom row of the grid
+      return (((width * width) - dino) <= width * 2)
+    })
+    console.log("anyDinosOnPenultimateRow", anyDinosOnPenultimateRow)
+
 
     if (anyDinosAtBottom) { // If the dinos reach the bottom of the grid, the dinos are removed, the dinosTimer is cleared and endGame() function is called
 
@@ -134,9 +142,9 @@ function startGame() {
       // removeItem(rockClass, rockCurrentPosition)
 
       // removeItem(missileClass, missileCurrentPosition)
-      clearInterval(dinosTimer)
-      clearInterval(missileTimer)
-      clearInterval(rockTimer)
+      // clearInterval(dinosTimer)
+      // clearInterval(missileTimer)
+      // clearInterval(rockTimer)
       //! What to do if the dinos reach the bottom of the grid, but livesRemaining is not 0?
       endGame()
 
@@ -174,7 +182,9 @@ function startGame() {
         addItem(dinoClass, dinosCurrentPosition)
       }
 
-      handleRock()
+      if (!anyDinosOnPenultimateRow) { // This conditional statement fixes the bug where the handleRock() function was throwing errors as it was still trying to find dinosEligibleToThrowRock (which comes before rockTimer begins) before the dinosTimer was stopped at its next loop
+        handleRock() // This way, the rock throwing function stops being called when the dinos reach the penultimate grid row
+      }
 
     }
 
@@ -191,9 +201,13 @@ function startGame() {
 /* endGame function */
 
 function endGame() {
+  console.log("endGame function called")
   clearInterval(dinosTimer)
   clearInterval(missileTimer)
   clearInterval(rockTimer)
+  removeItem(dinoClass, dinosCurrentPosition)
+  // removeItem(gunClass, gunCurrentPosition)
+  removeItem(rockClass, rockCurrentPosition)
 }
 
 
