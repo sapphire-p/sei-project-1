@@ -6,6 +6,11 @@ const width = 11
 const cellCount = width * width
 const cells = []
 
+// Start Screen and End Screen variables
+
+const startScreen = document.querySelector(".start-screen-container")
+const endScreen = document.querySelector(".end-screen-container")
+
 // Scoring variables
 
 let score = 0
@@ -13,6 +18,7 @@ let livesRemaining = 3
 
 const scoreDisplay = document.querySelector(".score-display")
 const livesDisplay = document.querySelector(".lives-display")
+const finalScoreDisplay = document.querySelector(".final-score-display")
 
 // Gun, Dinos, Missile, Rock position and class variables
 
@@ -27,9 +33,7 @@ let dinosCurrentPosition // = [4, 5, 6, 14, 15, 16, 17, 18, 24, 25, 26, 27, 28, 
 let dinosDirection = "right" // This variable stores the direction of movement of the dinos (initialised at "right")
 let dinoCounter // a variable added to help control the movement of the dinos so that when they move down, they only move down one cell
 const dinoClass = "dino"
-
-let anyDinosAtBottom
-let anyDinosOnPenultimateRow
+//! let allDinosDestroyed = false
 
 let missileCurrentPosition // index number
 const missileClass = "missile"
@@ -65,9 +69,9 @@ let rockTimer
 
 // Speed variables
 
-let dinosSpeed = 100 // 1500 usually
-let rockSpeed = 700 // 700 or 500 previously
-let missileSpeed = 200 // 200 previously
+let dinosSpeed = 1500 // 1500 usually
+let rockSpeed = 600 // 700 or 500 previously
+let missileSpeed = 100 // 200 previously
 let explosionSpeed = 300
 // let rockThrowFrequency = 500 //! not needed - handlRock function is called within dinosTimer
 
@@ -98,6 +102,8 @@ document.addEventListener('keyup', keysGunAction)
 
 function startGame() {
 
+  startScreen.style.display = "none"
+
   console.log("startGame() function called")
 
   for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
@@ -122,30 +128,27 @@ function startGame() {
 
   dinosTimer = setInterval(() => {
 
-    anyDinosAtBottom = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the bottom row of the grid
+    const anyDinosAtBottom = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the bottom row of the grid
       return (((width * width) - dino) <= width)
     })
     console.log("anyDinosAtBottom", anyDinosAtBottom)
 
-    anyDinosOnPenultimateRow = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the bottom row of the grid
+    const anyDinosOnPenultimateRow = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the penultimate row of the grid
       return (((width * width) - dino) <= width * 2)
     })
     console.log("anyDinosOnPenultimateRow", anyDinosOnPenultimateRow)
 
+    // cells.forEach(cell => { // Checks if there are no dinos present on the grid
+    //   if (cell.classList.contains(dinoClass)) {
+    //     allDinosDestroyed = false // if there are no dinos present on the grid, allDinosDestroyed updates to true
+    //   }
+    // })
+    // console.log("allDinosDestroyed", allDinosDestroyed)
 
     if (anyDinosAtBottom) { // If the dinos reach the bottom of the grid, the dinos are removed, the dinosTimer is cleared and endGame() function is called
 
-      console.log("dinos at bottom of grid")
+      console.log("dinos at bottom of grid - call endGame function")
 
-      // removeItem(dinoClass, dinosCurrentPosition)
-      // removeItem(gunClass, gunCurrentPosition)
-      // removeItem(rockClass, rockCurrentPosition)
-
-      // removeItem(missileClass, missileCurrentPosition)
-      // clearInterval(dinosTimer)
-      // clearInterval(missileTimer)
-      // clearInterval(rockTimer)
-      //! What to do if the dinos reach the bottom of the grid, but livesRemaining is not 0?
       endGame()
 
     } else {
@@ -190,10 +193,6 @@ function startGame() {
 
   }, dinosSpeed)
 
-  // rockThrowTimer = setInterval(() => {
-  //   handleRock()
-  // }, rockThrowFrequency)
-
 }
 
 
@@ -201,13 +200,52 @@ function startGame() {
 /* endGame function */
 
 function endGame() {
+
   console.log("endGame function called")
+
   clearInterval(dinosTimer)
   clearInterval(missileTimer)
   clearInterval(rockTimer)
   removeItem(dinoClass, dinosCurrentPosition)
-  // removeItem(gunClass, gunCurrentPosition)
-  removeItem(rockClass, rockCurrentPosition)
+
+  let gridContainsMissile
+  cells.forEach(cell => { // Checks if there is a missile present on the grid
+    if (cell.classList.contains(missileClass)) {
+      gridContainsMissile = true // if there is a missile present on the grid, gridContainsMissile updates to true
+    }
+  })
+  if (gridContainsMissile) { // Removes missile if there is one present at the end of the game
+    removeItem(missileClass, missileCurrentPosition)
+  }
+
+  let gridContainsRock
+  cells.forEach(cell => { // Checks if there is a rock present on the grid
+    if (cell.classList.contains(rockClass)) {
+      gridContainsRock = true // if there is a rock present on the grid, gridContainsRock updates to true
+    }
+  })
+  if (gridContainsRock) { // Removes rock if there is one present at the end of the game
+    removeItem(rockClass, rockCurrentPosition)
+  }
+
+  removeItem(gunClass, gunCurrentPosition)
+
+
+  //score
+
+  let finalScore = score
+  finalScoreDisplay.innerText = finalScore
+  score = 0
+
+  console.log(score)
+  console.log(finalScore)
+
+
+  //livesRemaining
+
+
+  endScreen.style.display = "flex"
+
 }
 
 
@@ -320,7 +358,7 @@ function handleMissile() {
         setTimeout(() => {
           cells[cellIndexOfMissileDinoCollision].classList.remove(explosionClass)
         }, explosionSpeed)
-        cells[cellIndexOfMissileDinoCollision].classList.remove(dinoClass) //! The 3 lines of code below do this job instead, so this line is now redundant. Removes the dino class from the cell where collision occurred
+        // cells[cellIndexOfMissileDinoCollision].classList.remove(dinoClass) //! The 3 lines of code below do this job instead, so this line is now redundant. Removes the dino class from the cell where collision occurred
         removeItem(dinoClass, dinosCurrentPosition) // Removes the dino class from the cell where collision occurred
         dinosCurrentPosition.splice(indexOfCollisionCellInDinosCurrentPosition, 1) // Updates the dinosCurrentPosition array to reflect the missile collision deleting the dino
         addItem(dinoClass, dinosCurrentPosition) // Displays updated dinosCurrentPosition array with collision dino deleted
@@ -380,13 +418,13 @@ function handleRock() {
     }
   })
 
-  if (gridContainsRock === true || anyDinosAtBottom) { // if there is already a rock on the grid OR there are anyDinosAtBottom //! Has potentially solved the problem around 6 lines below - see *
-    // console.log("There is already a rock on the grid - one rock at a time") //! Could simply change to 'return' to exit the handleRock() function
+  if (gridContainsRock === true) { // if there is already a rock on the grid
+    // console.log("There is already a rock on the grid - one rock at a time")
     return
   } else { // identify dinos eligible to throw a rock, randomly select one and position the rock in the cell below it, before starting the rockTimer
     let dinosEligibleToThrowRock = []
     dinosCurrentPosition.forEach(dino => { // Checks dinosCurrentPosition for dino index where the cell immediately below has no dino/missile/gun classes on it
-      if (!cells[dino + width].classList.contains(dinoClass) && !cells[dino + width].classList.contains(missileClass) && !cells[dino + width].classList.contains(gunClass)) { //! * Potentially solved: Throwing errors when dinos reach bottom of grid
+      if (!cells[dino + width].classList.contains(dinoClass) && !cells[dino + width].classList.contains(missileClass) && !cells[dino + width].classList.contains(gunClass)) {
         dinosEligibleToThrowRock.push(dino)
       }
     })
@@ -433,7 +471,6 @@ function handleRock() {
         rockCurrentPosition += width
         addItem(rockClass, rockCurrentPosition)
       }
-
 
     }, rockSpeed)
   }
