@@ -74,13 +74,25 @@ let explosionSpeed = 300
 // Event Listeners
 
 const startButton = document.querySelector(".start-button")
-startButton.addEventListener("click", startGame)
+// startButton.addEventListener("click", startGame) //? Remember to turn this on again after styling grid in CSS!
 
 document.addEventListener('keyup', keysGunAction)
 
 
 
-/* startGame function */
+/* startGame function */ //!
+
+for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
+  const cell = document.createElement("div")
+  cell.innerText = i
+  if (i > (width * width - (width + 1))) { // This adds a class of fence to the bottom row of the grid
+    cell.classList.add(fenceClass)
+  }
+  grid.appendChild(cell)
+  cells.push(cell)
+}
+
+// startGame() //!
 
 function startGame() {
 
