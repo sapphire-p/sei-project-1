@@ -34,6 +34,8 @@ const rockClass = "rock"
 
 const explosionClass = "explosion"
 
+const fenceClass = "fence"
+
 
 // Collision variables //? These are all locally-scoped inside functions
 
@@ -78,6 +80,9 @@ function startGame() {
   for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
     const cell = document.createElement("div")
     cell.innerText = i
+    if (i > (width * width - (width + 1))) {
+      cell.classList.add(fenceClass)
+    }
     grid.appendChild(cell)
     cells.push(cell)
   }

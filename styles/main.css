@@ -87,3 +87,9 @@ body {
   background-repeat: no-repeat;
   background-size: contain;
 }
+
+.fence {
+  background-image: url("../assets/Fence.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+}
