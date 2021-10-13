@@ -33,7 +33,6 @@ let dinosCurrentPosition // = [4, 5, 6, 14, 15, 16, 17, 18, 24, 25, 26, 27, 28, 
 let dinosDirection = "right" // This variable stores the direction of movement of the dinos (initialised at "right")
 let dinoCounter // a variable added to help control the movement of the dinos so that when they move down, they only move down one cell
 const dinoClass = "dino"
-//! let allDinosDestroyed = false
 
 let missileCurrentPosition // index number
 const missileClass = "missile"
@@ -138,6 +137,12 @@ function startGame() {
     })
     console.log("anyDinosOnPenultimateRow", anyDinosOnPenultimateRow)
 
+    const anyDinosLeftOnGrid = cells.some(cell => { // Checks if there are no dinos present on the grid
+      return cell.classList.contains(dinoClass) // if there are any dinos present on the grid, anyDinosLeftOnGrid is true, else anyDinosLeftOnGrid is false
+    })
+    console.log("anyDinosLeftOnGrid", anyDinosLeftOnGrid)
+
+
     // cells.forEach(cell => { // Checks if there are no dinos present on the grid
     //   if (cell.classList.contains(dinoClass)) {
     //     allDinosDestroyed = false // if there are no dinos present on the grid, allDinosDestroyed updates to true
@@ -145,9 +150,9 @@ function startGame() {
     // })
     // console.log("allDinosDestroyed", allDinosDestroyed)
 
-    if (anyDinosAtBottom) { // If the dinos reach the bottom of the grid, the dinos are removed, the dinosTimer is cleared and endGame() function is called
+    if (anyDinosAtBottom || !anyDinosLeftOnGrid) { // If the dinos reach the bottom of the grid or there are not dinos left on grid, the endGame() function is called
 
-      console.log("dinos at bottom of grid - call endGame function")
+      console.log("dinos at bottom of grid or no dinos left on grid - call endGame function")
 
       endGame()
 
@@ -185,7 +190,7 @@ function startGame() {
         addItem(dinoClass, dinosCurrentPosition)
       }
 
-      if (!anyDinosOnPenultimateRow) { // This conditional statement fixes the bug where the handleRock() function was throwing errors as it was still trying to find dinosEligibleToThrowRock (which comes before rockTimer begins) before the dinosTimer was stopped at its next loop
+      if (!anyDinosOnPenultimateRow && anyDinosLeftOnGrid) { // This conditional statement fixes the bug where the handleRock() function was throwing errors as it was still trying to find dinosEligibleToThrowRock (which comes before rockTimer begins) before the dinosTimer was stopped at its next loop
         handleRock() // This way, the rock throwing function stops being called when the dinos reach the penultimate grid row
       }
 
