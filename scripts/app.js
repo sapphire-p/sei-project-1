@@ -90,8 +90,13 @@ function startGame() {
 
   console.log("startGame() function called")
 
-  startScreen.style.display = "none"
   endScreen.style.display = "none"
+
+  startScreen.classList.add("animate__fadeOutRight")
+
+  setTimeout(() => {
+    startScreen.classList.add("hidden")
+  }, 2000)
 
   scoreDisplay.innerText = score
   livesDisplay.innerText = livesRemaining
@@ -121,68 +126,74 @@ function startGame() {
   dinosCurrentPosition = dinosStartPosition
   addItem(dinoClass, dinosCurrentPosition)
 
-  dinosTimer = setInterval(() => {
+  setTimeout(() => {
 
-    const anyDinosAtBottom = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the bottom row of the grid
-      return (((width * width) - dino) <= width)
-    })
-    console.log("anyDinosAtBottom", anyDinosAtBottom)
+    console.log("Get ready to play!")
 
-    const anyDinosOnPenultimateRow = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the penultimate row of the grid
-      return (((width * width) - dino) <= width * 2)
-    })
-    console.log("anyDinosOnPenultimateRow", anyDinosOnPenultimateRow)
+    dinosTimer = setInterval(() => {
 
-    const anyDinosLeftOnGrid = cells.some(cell => { // Checks if there are no dinos present on the grid
-      return cell.classList.contains(dinoClass) // if there are any dinos present on the grid, anyDinosLeftOnGrid is true, else anyDinosLeftOnGrid is false
-    })
-    console.log("anyDinosLeftOnGrid", anyDinosLeftOnGrid)
-
-
-    if (anyDinosAtBottom || !anyDinosLeftOnGrid) { // If the dinos reach the bottom of the grid or there are not dinos left on grid, the endGame() function is called
-
-      console.log("dinos at bottom of grid or no dinos left on grid - call endGame function")
-
-      endGame()
-
-    } else {
-
-      const anyDinosOnTheEdge = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the left or right edge of the grid
-        return ((dino % width === width - 1) || (dino % width === 0))
+      const anyDinosAtBottom = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the bottom row of the grid
+        return (((width * width) - dino) <= width)
       })
+      console.log("anyDinosAtBottom", anyDinosAtBottom)
 
-      if (anyDinosOnTheEdge && !dinoCounter) { // If any dinos are on the edge AND dinoCounter is not indicating (with a truthy 1) that a down movement has just been performed, *go down*, and then *change direction and move one sideways*
-        // Remember, on the line above, since 'anyDinosOnTheEdge' will either be a boolean true or false, you do not need to write 'anyDinosOnTheEdge === true'
-        dinoCounter++
-        removeItem(dinoClass, dinosCurrentPosition) // -*go down*
-        dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-          return dinoPosition += width
+      const anyDinosOnPenultimateRow = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the penultimate row of the grid
+        return (((width * width) - dino) <= width * 2)
+      })
+      console.log("anyDinosOnPenultimateRow", anyDinosOnPenultimateRow)
+
+      const anyDinosLeftOnGrid = cells.some(cell => { // Checks if there are no dinos present on the grid
+        return cell.classList.contains(dinoClass) // if there are any dinos present on the grid, anyDinosLeftOnGrid is true, else anyDinosLeftOnGrid is false
+      })
+      console.log("anyDinosLeftOnGrid", anyDinosLeftOnGrid)
+
+
+      if (anyDinosAtBottom || !anyDinosLeftOnGrid) { // If the dinos reach the bottom of the grid or there are not dinos left on grid, the endGame() function is called
+
+        console.log("dinos at bottom of grid or no dinos left on grid - call endGame function")
+
+        endGame()
+
+      } else {
+
+        const anyDinosOnTheEdge = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the left or right edge of the grid
+          return ((dino % width === width - 1) || (dino % width === 0))
         })
-        dinosDirection = dinosDirection === 'right' ? 'left' : 'right' // -*change direction and move one sideways* // ternary operator that switches the value of dinosDirection (from right to left, or else left to right)
-        addItem(dinoClass, dinosCurrentPosition)
-      } else if (dinosDirection === 'left') { // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "left", move dinos left
-        dinoCounter = 0
-        removeItem(dinoClass, dinosCurrentPosition)
-        dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-          return dinoPosition -= 1
-        })
-        addItem(dinoClass, dinosCurrentPosition)
-      } else if (dinosDirection === 'right') { // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "right", move dinos right
-        dinoCounter = 0
-        removeItem(dinoClass, dinosCurrentPosition)
-        dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-          return dinoPosition += 1
-        })
-        addItem(dinoClass, dinosCurrentPosition)
+
+        if (anyDinosOnTheEdge && !dinoCounter) { // If any dinos are on the edge AND dinoCounter is not indicating (with a truthy 1) that a down movement has just been performed, *go down*, and then *change direction and move one sideways*
+          // Remember, on the line above, since 'anyDinosOnTheEdge' will either be a boolean true or false, you do not need to write 'anyDinosOnTheEdge === true'
+          dinoCounter++
+          removeItem(dinoClass, dinosCurrentPosition) // -*go down*
+          dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+            return dinoPosition += width
+          })
+          dinosDirection = dinosDirection === 'right' ? 'left' : 'right' // -*change direction and move one sideways* // ternary operator that switches the value of dinosDirection (from right to left, or else left to right)
+          addItem(dinoClass, dinosCurrentPosition)
+        } else if (dinosDirection === 'left') { // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "left", move dinos left
+          dinoCounter = 0
+          removeItem(dinoClass, dinosCurrentPosition)
+          dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+            return dinoPosition -= 1
+          })
+          addItem(dinoClass, dinosCurrentPosition)
+        } else if (dinosDirection === 'right') { // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "right", move dinos right
+          dinoCounter = 0
+          removeItem(dinoClass, dinosCurrentPosition)
+          dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+            return dinoPosition += 1
+          })
+          addItem(dinoClass, dinosCurrentPosition)
+        }
+
+        if (!anyDinosOnPenultimateRow && anyDinosLeftOnGrid) { // This conditional statement fixes the bug where the handleRock() function was throwing errors as it was still trying to find dinosEligibleToThrowRock (which comes before rockTimer begins) before the dinosTimer was stopped at its next loop
+          handleRock() // This way, the rock throwing function stops being called when the dinos reach the penultimate grid row (or if no dinos left on grid)
+        }
+
       }
 
-      if (!anyDinosOnPenultimateRow && anyDinosLeftOnGrid) { // This conditional statement fixes the bug where the handleRock() function was throwing errors as it was still trying to find dinosEligibleToThrowRock (which comes before rockTimer begins) before the dinosTimer was stopped at its next loop
-        handleRock() // This way, the rock throwing function stops being called when the dinos reach the penultimate grid row (or if no dinos left on grid)
-      }
+    }, dinosSpeed)
 
-    }
-
-  }, dinosSpeed)
+  }, 600)
 
 }
 
@@ -211,6 +222,10 @@ function endGame() {
   console.log(finalScore)
 
   endScreen.style.display = "flex"
+
+  // startScreen.style.display = "none"
+
+  startScreen.classList.remove("hidden")
 
 }
 

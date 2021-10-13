@@ -5,7 +5,9 @@
 body {
   height: 100vh;
   margin: 0;
-  background: black
+  background: black;
+  /* This overflow:hidden property removes the visibility (and funtionality too I think) of scroll bars on the page: */
+  overflow: hidden;
 }
 
 .page-container {
@@ -36,6 +38,11 @@ body {
   display: flex;
   background: lightskyblue;
   z-index: 1;
+}
+
+/* The CSS selector below (i.e. .class1.class2 syntax) means if an element has both a class of class1 AND a class of class2 at the same time: */
+.start-screen-container.hidden, .end-screen-container.hidden { 
+  display: none;
 }
 
 .end-screen-container {
@@ -142,3 +149,26 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+
+/* ANIMATIONS */
+
+h1 {
+  /* animation: animate__bounce infinite */
+  animation-name: animate__bounce;
+  animation-iteration-count: 5;
+  animation-delay: 2s;
+}
+
+.animate__animated.animate__fadeOutRight {
+  animation-duration: 1s;
+}
+
+/* 
+.animate__animated.animate__bounce {
+  --animate-duration: 500ms;
+  --animate-delay: 2s;
+  --animate-iteration-count: infinite;
+
+}
+ */
