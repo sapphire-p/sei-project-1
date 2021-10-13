@@ -47,7 +47,7 @@ body {
 
 .end-screen-container {
   /* change display: to 'flex' when you want start-screen-container to be visible */
-  display: none;
+  display: flex;
   background: pink;
   z-index: 2;
 }
@@ -160,9 +160,16 @@ h1 {
   animation-delay: 2s;
 }
 
-.animate__animated.animate__fadeOutRight {
-  animation-duration: 1s;
-}
+/* .animate__animated.animate__fadeOutRight {
+  animation-duration: 2s;
+} */
+
+/* .animate__animated.animate__fadeInLeft {
+  animation-duration: 2s;
+} */
+
+
+
 
 /* 
 .animate__animated.animate__bounce {

@@ -54,9 +54,9 @@ let rockTimer
 
 // Speed variables
 
-let dinosSpeed = 1500 // 1500 usually
-let rockSpeed = 600 // 700 or 500 previously
-let missileSpeed = 100 // 200 previously
+let dinosSpeed = 200 // 1500 usually
+let rockSpeed = 600 // 600 usually (between 500-700 is good)
+let missileSpeed = 100 // 100 usually (200 previously)
 let explosionSpeed = 300
 
 
@@ -68,7 +68,7 @@ startButton.addEventListener("click", startGame) //? Comment this out to style t
 document.addEventListener('keyup', keysGunAction)
 
 const playAgainButton = document.querySelector(".play-again-button")
-playAgainButton.addEventListener("click", startGame)
+playAgainButton.addEventListener("click", playAgainButtonClicked)
 
 
 /* startGame function */ //! 
@@ -86,11 +86,55 @@ playAgainButton.addEventListener("click", startGame)
 
 // startGame() //!
 
+
+function playAgainButtonClicked() {
+
+  if (grid.hasChildNodes) { // If a grid already exists from a previosuly game, this block of code removes the grid by removing the grid's child elements one by one
+    let gridChildElementCount = grid.childElementCount
+    for (i = 0; i < gridChildElementCount; i++) {
+      grid.lastChild.remove()
+    }
+  }
+
+  cells = [] // In case a game has already been played, this resets the cells array to an empty array, ready to receive a fresh set of cell indexes
+
+  for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
+    const cell = document.createElement("div")
+    cell.innerText = i
+    if (i > (width * width - (width + 1))) { // This adds a class of fence to the bottom row of the grid
+      cell.classList.add(fenceClass)
+    }
+    grid.appendChild(cell)
+    cells.push(cell)
+  }
+
+  scoreDisplay.innerText = score
+  livesDisplay.innerText = livesRemaining
+
+  gunCurrentPosition = gunStartPosition
+  addItem(gunClass, gunCurrentPosition)
+  dinosCurrentPosition = dinosStartPosition
+  addItem(dinoClass, dinosCurrentPosition)
+
+  endScreen.classList.add("animate__fadeOutRight")
+  setTimeout(() => {
+    endScreen.classList.add("hidden")
+    startGame()
+  }, 1000)
+
+}
+
+
 function startGame() {
 
   console.log("startGame() function called")
 
-  endScreen.style.display = "none"
+
+
+  // endScreen.style.display = "none"
+  endScreen.classList.add("hidden")
+  endScreen.classList.remove("animate__fadeInLeft")
+
 
   startScreen.classList.add("animate__fadeOutRight")
 
@@ -221,11 +265,17 @@ function endGame() {
   console.log(score)
   console.log(finalScore)
 
-  endScreen.style.display = "flex"
+
+  // endScreen.style.display = "flex"
+
+  endScreen.classList.remove("hidden")
+  endScreen.classList.add("animate__fadeInLeft")
+  endScreen.classList.remove("animate__fadeOutRight")
 
   // startScreen.style.display = "none"
 
-  startScreen.classList.remove("hidden")
+  startScreen.classList.add("hidden")
+  startScreen.classList.remove("animate__fadeOutRight") // Not sure if this is strictly necessary, as the start-screen is only shown once at the very start
 
 }
 
@@ -420,7 +470,7 @@ function handleRock() {
           cells[cellIndexOfRockGunCollision].classList.add(explosionClass)
           setTimeout(() => {
             endGame()
-          }, 1500)
+          }, 1000)
         } else {
           removeItem(rockClass, rockCurrentPosition) // Removes the rock class from the cell where collision occurred
           cells[cellIndexOfRockGunCollision].classList.add(explosionClass)
