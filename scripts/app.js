@@ -108,6 +108,10 @@ function startGame() {
   startScreen.style.display = "none"
   endScreen.style.display = "none"
 
+  scoreDisplay.innerText = score
+  livesDisplay.innerText = livesRemaining
+
+
   if (grid.hasChildNodes) { // If a grid already exists from a previosuly game, this block of code removes the grid by removing the grid's child elements one by one
     let gridChildElementCount = grid.childElementCount
     for (i = 0; i < gridChildElementCount; i++) {
@@ -126,9 +130,6 @@ function startGame() {
     grid.appendChild(cell)
     cells.push(cell)
   }
-
-  scoreDisplay.innerText = score
-  livesDisplay.innerText = livesRemaining
 
   gunCurrentPosition = gunStartPosition
   addItem(gunClass, gunCurrentPosition)
@@ -254,12 +255,17 @@ function endGame() {
 
   //score
 
+  // Stores final score value in a new variable and displays it on the end-screen:
   let finalScore = score
   finalScoreDisplay.innerText = finalScore
+
+  // Resets score and livesRemaining to their initial values, ready for next game:
   score = 0
+  livesRemaining = 3
 
   console.log(score)
   console.log(finalScore)
+
 
 
   endScreen.style.display = "flex"
@@ -274,7 +280,7 @@ function endGame() {
 
   // cells = [] // Resets the cells array to an empty array, ready to receive a fresh set of cell indexes if player clicks "Play again" (which calls startGame function)
 
-  //livesRemaining
+
 
 
 
