@@ -103,10 +103,19 @@ playAgainButton.addEventListener("click", startGame)
 
 function startGame() {
 
+  console.log("startGame() function called")
+
   startScreen.style.display = "none"
   endScreen.style.display = "none"
 
-  console.log("startGame() function called")
+  if (grid.hasChildNodes) { // If a grid already exists from a previosuly game, this block of code removes the grid by removing the grid's child elements one by one
+    let gridChildElementCount = grid.childElementCount
+    for (i = 0; i < gridChildElementCount; i++) {
+      grid.lastChild.remove()
+    }
+  }
+
+  cells = [] // In case a game has already been played, this resets the cells array to an empty array, ready to receive a fresh set of cell indexes
 
   for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
     const cell = document.createElement("div")
@@ -211,32 +220,36 @@ function endGame() {
 
   console.log("endGame function called")
 
+  // All Timers are cleared:
   clearInterval(dinosTimer)
   clearInterval(missileTimer)
   clearInterval(rockTimer)
-  removeItem(dinoClass, dinosCurrentPosition)
 
-  let gridContainsMissile
-  cells.forEach(cell => { // Checks if there is a missile present on the grid
-    if (cell.classList.contains(missileClass)) {
-      gridContainsMissile = true // if there is a missile present on the grid, gridContainsMissile updates to true
-    }
-  })
-  if (gridContainsMissile) { // Removes missile if there is one present at the end of the game
-    removeItem(missileClass, missileCurrentPosition)
-  }
+  // All remaining item classes are removed from the grid: //! Not necessary as the end-screen will hide anything going on on the old grid after the game has ended. This way no errors are thrown if the user continues to tap the keys
+  // removeItem(dinoClass, dinosCurrentPosition)
+  // removeItem(gunClass, gunCurrentPosition)
 
-  let gridContainsRock
-  cells.forEach(cell => { // Checks if there is a rock present on the grid
-    if (cell.classList.contains(rockClass)) {
-      gridContainsRock = true // if there is a rock present on the grid, gridContainsRock updates to true
-    }
-  })
-  if (gridContainsRock) { // Removes rock if there is one present at the end of the game
-    removeItem(rockClass, rockCurrentPosition)
-  }
+  // let gridContainsMissile
+  // cells.forEach(cell => { // Checks if there is a missile present on the grid
+  //   if (cell.classList.contains(missileClass)) {
+  //     gridContainsMissile = true // if there is a missile present on the grid, gridContainsMissile updates to true
+  //   }
+  // })
+  // if (gridContainsMissile) { // Removes missile if there is one present at the end of the game
+  //   removeItem(missileClass, missileCurrentPosition)
+  // }
 
-  removeItem(gunClass, gunCurrentPosition)
+  // let gridContainsRock
+  // cells.forEach(cell => { // Checks if there is a rock present on the grid
+  //   if (cell.classList.contains(rockClass)) {
+  //     gridContainsRock = true // if there is a rock present on the grid, gridContainsRock updates to true
+  //   }
+  // })
+  // if (gridContainsRock) { // Removes rock if there is one present at the end of the game
+  //   removeItem(rockClass, rockCurrentPosition)
+  // }
+
+
 
 
   //score
@@ -252,18 +265,18 @@ function endGame() {
   endScreen.style.display = "flex"
 
 
-  if (grid.hasChildNodes) { // This block of code removes the grid by removing the grid's child elements one by one
-    let gridChildElementCount = grid.childElementCount
-    for (i = 0; i < gridChildElementCount; i++) {
-      grid.lastChild.remove()
-    }
-  }
+  // if (grid.hasChildNodes) { // This block of code removes the grid by removing the grid's child elements one by one //! Moved into the start of the startGame() function
+  //   let gridChildElementCount = grid.childElementCount
+  //   for (i = 0; i < gridChildElementCount; i++) {
+  //     grid.lastChild.remove()
+  //   }
+  // }
 
-
+  // cells = [] // Resets the cells array to an empty array, ready to receive a fresh set of cell indexes if player clicks "Play again" (which calls startGame function)
 
   //livesRemaining
 
-  cells = []
+
 
 
 }
