@@ -32,12 +32,16 @@ body {
   position: absolute;
   text-align: center;
   color: white;
+  background-image: url("../assets/Jungle.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 2vh;
 }
 
 .start-screen-container {
   /* change display: to 'flex' when you want start-screen-container to be visible */
   display: flex;
-  background: lightskyblue;
   z-index: 1;
 }
 
@@ -49,7 +53,6 @@ body {
 .end-screen-container {
   /* change display: to 'flex' when you want start-screen-container to be visible */
   display: flex;
-  background: pink;
   z-index: 2;
 }
 
@@ -61,7 +64,10 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: powderblue;
+  /* background: powderblue; */
+  background-image: url("../assets/River-jungle.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
   width: 100%;
   height: 70%;
   min-height: 600px;

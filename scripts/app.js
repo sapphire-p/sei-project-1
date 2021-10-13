@@ -62,6 +62,8 @@ let explosionSpeed = 300
 
 // Event Listeners
 
+// window.addEventListener('DOMContentLoaded', playAudio)
+
 const startButton = document.querySelector(".start-button")
 startButton.addEventListener("click", startGame) //? Comment this out to style the grid in CSS!
 
