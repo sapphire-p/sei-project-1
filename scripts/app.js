@@ -4,7 +4,7 @@
 const grid = document.querySelector(".grid")
 const width = 11
 const cellCount = width * width
-const cells = []
+let cells = []
 
 // Start Screen and End Screen variables
 
@@ -68,7 +68,7 @@ let rockTimer
 
 // Speed variables
 
-let dinosSpeed = 1500 // 1500 usually
+let dinosSpeed = 200 // 1500 usually
 let rockSpeed = 600 // 700 or 500 previously
 let missileSpeed = 100 // 200 previously
 let explosionSpeed = 300
@@ -82,6 +82,8 @@ startButton.addEventListener("click", startGame) //? Comment this out to style t
 
 document.addEventListener('keyup', keysGunAction)
 
+const playAgainButton = document.querySelector(".play-again-button")
+playAgainButton.addEventListener("click", startGame)
 
 
 /* startGame function */ //! 
@@ -102,6 +104,7 @@ document.addEventListener('keyup', keysGunAction)
 function startGame() {
 
   startScreen.style.display = "none"
+  endScreen.style.display = "none"
 
   console.log("startGame() function called")
 
@@ -246,10 +249,22 @@ function endGame() {
   console.log(finalScore)
 
 
+  endScreen.style.display = "flex"
+
+
+  if (grid.hasChildNodes) { // This block of code removes the grid by removing the grid's child elements one by one
+    let gridChildElementCount = grid.childElementCount
+    for (i = 0; i < gridChildElementCount; i++) {
+      grid.lastChild.remove()
+    }
+  }
+
+
+
   //livesRemaining
 
+  cells = []
 
-  endScreen.style.display = "flex"
 
 }
 
