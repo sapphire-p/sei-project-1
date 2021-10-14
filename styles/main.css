@@ -18,7 +18,7 @@ body {
   height: 100vh;
 }
 
-/* START SCREEN & END SCREEN */
+/* START SCREEN & END SCREEN VISIBILITY AND CORE STYLING */
 
 
 .screen-container {
@@ -45,6 +45,20 @@ body {
   z-index: 1;
 }
 
+.end-screen-container {
+  /* change display: to 'flex' when you want start-screen-container to be visible */
+  display: flex;
+  z-index: 2;
+}
+
+/* The CSS selector below (i.e. .class1.class2 syntax) means if an element has both a class of class1 AND a class of class2 at the same time: */
+.start-screen-container.hidden, .end-screen-container.hidden { 
+  display: none;
+}
+
+
+/* Start-screen detail */
+
 .tm-symbol {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
@@ -60,18 +74,6 @@ body {
   color: yellow;
 }
 
-/* The CSS selector below (i.e. .class1.class2 syntax) means if an element has both a class of class1 AND a class of class2 at the same time: */
-.start-screen-container.hidden, .end-screen-container.hidden { 
-  display: none;
-}
-
-.end-screen-container {
-  /* change display: to 'flex' when you want start-screen-container to be visible */
-  display: flex;
-  z-index: 2;
-}
-
-
 .start-button {
   cursor: pointer;
   height: 30px;
@@ -80,7 +82,13 @@ body {
   border-radius: 30px;
 }
 
-/* GAME */
+/* End-screen detail */
+
+
+
+
+
+/* GAMEPLAY VIEW */
 
 .game-screen-container {
   display: flex;
@@ -96,21 +104,32 @@ body {
   min-height: 600px;
 }
 
+.game-container {
+  /* border: 10px solid orange; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  width: 60vh;
+  min-height: 500px;
+  min-width: 500px;
+}
+
 .score-and-lives-container {
-  border: 1px solid green;
+  /* border: 1px solid green; */
   background: palegreen;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  width: 60vh;
-  min-width: 500px;
+  width: 100%;
+  border-top-right-radius: 25px;
+  border-top-left-radius: 25px;
 }
 
 
 
 /* Grid */
-
-
 
 
 .grid-container {
@@ -121,6 +140,10 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   z-index: 0;
+  height: 100%;
+  width: 100%;
+  /* border-bottom-right-radius: 25px;
+  border-bottom-left-radius: 25px; */
 }
 
 .grid {
@@ -128,11 +151,12 @@ body {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  /* height: 100%; */
-  height: 60vh;
+  height: 100%;
+  width: 100%;
+  /* height: 60vh;
   width: 60vh;
   min-height: 500px;
-  min-width: 500px;
+  min-width: 500px; */
 }
 
 .grid div {
@@ -180,8 +204,14 @@ body {
   background-size: cover;
 }
 
+.fence-corners {
+  border-bottom-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+}
+
 
 /* ANIMATIONS */
+
 
 h1 {
   /* animation: animate__bounce infinite */
