@@ -76,7 +76,7 @@ playAgainButton.addEventListener("click", playAgainButtonClicked)
 // Audio Event Listeners
 
 const music = document.querySelector("#music")
-// music.loop = true
+music.loop = true
 startButton.addEventListener("click", playMusic) //! Need to set this music audio up properly
 
 let musicOn = true
@@ -234,7 +234,7 @@ function startGame() {
 
         console.log("dinos at bottom of grid or no dinos left on grid - call endGame function")
 
-        endGame() //? Comment this out to style the grid in CSS!
+        // endGame() //? Comment this out to style the grid in CSS!
 
       } else {
 
