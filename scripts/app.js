@@ -64,8 +64,6 @@ let explosionSpeed = 300
 
 // Event Listeners
 
-// window.addEventListener('DOMContentLoaded', playAudio) //! Need to set this music audio up properly
-
 const startButton = document.querySelector(".start-button")
 startButton.addEventListener("click", startGame) //? Comment this out to style the grid in CSS!
 
@@ -73,6 +71,42 @@ document.addEventListener('keyup', keysGunAction)
 
 const playAgainButton = document.querySelector(".play-again-button")
 playAgainButton.addEventListener("click", playAgainButtonClicked)
+
+
+// Audio Event Listeners
+
+const music = document.querySelector("#music")
+// music.loop = true
+startButton.addEventListener("click", playMusic) //! Need to set this music audio up properly
+
+let musicOn = true
+
+const musicButton = document.querySelector(".music-button")
+musicButton.addEventListener("click", musicButtonClicked)
+
+//! playAudio
+
+function playMusic() {
+  if (musicOn) {
+    music.src = "./assets/audio/kim_lightyear_-_dino_instrumental.wav"
+    music.play()
+  } else {
+    music.pause()
+  }
+}
+
+function musicButtonClicked(event) {
+  console.log("Music button clicked")
+  if (event.target.innerText === "Turn Music Off") {
+    musicOn = false
+    event.target.innerText = "Turn Music On"
+    playMusic()
+  } else if (event.target.innerText === "Turn Music On") {
+    musicOn = true
+    event.target.innerText = "Turn Music Off"
+    playMusic()
+  }
+}
 
 
 /* startGame function */ //! 
@@ -200,7 +234,7 @@ function startGame() {
 
         console.log("dinos at bottom of grid or no dinos left on grid - call endGame function")
 
-        // endGame() //? Comment this out to style the grid in CSS!
+        endGame() //? Comment this out to style the grid in CSS!
 
       } else {
 
