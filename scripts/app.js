@@ -59,10 +59,10 @@ let rockTimer
 
 // Speed variables
 
-let dinosSpeed = 200 // 1500 usually
+let dinosSpeed = 900 // 900 is the default, for a more challenging game. 1000 or 1500 for an easier game
 let rockSpeed = 600 // 600 usually (between 500-700 is good)
-let missileSpeed = 100 // 100 usually (200 previously)
-let explosionSpeed = 300
+let missileSpeed = 100 // 100 usually (200 for slower missiles and a more challenging game)
+let explosionSpeed = 330 // 300 usually
 
 
 // startButton and playAgainButton Event Listeners
@@ -299,7 +299,7 @@ function endGame() {
   finalScoreDisplay.innerText = finalScore
 
   if (finalScore >= 2000) {
-    gameResult.innerText = "GREAT JOB"
+    gameResult.innerText = "GREAT JOB!"
     gameComment.innerText = "Perfect score! No dinos escaped."
   } else {
     gameResult.innerText = "GAME OVER"
