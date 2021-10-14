@@ -84,7 +84,7 @@ body {
   /* padding: 20px 16vw; */
 }
 
-p {
+.instructions-container p {
   margin: 8px 0;
 }
 
@@ -133,8 +133,36 @@ p {
 /* End-screen detail */
 
 
+.game-result-container {
+  display: flex;
+}
 
+.final-score-container {
+  display: flex;
+  font-size: 1.4em;
+}
 
+.game-comment-container {
+  display: flex;
+  margin: 0 0 20px 0;
+}
+
+.game-comment {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.play-again-button-container {
+  display: flex;
+  margin: 20px 0 0 0;
+}
+
+h1 {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 40px;
+  color: #FFE045;
+  margin: 0 0 20px 0;
+}
 
 /* GAMEPLAY VIEW */
 
