@@ -62,12 +62,10 @@ let missileSpeed = 100 // 100 usually (200 previously)
 let explosionSpeed = 300
 
 
-// Event Listeners
+// startButton and playAgainButton Event Listeners
 
 const startButton = document.querySelector(".start-button")
 startButton.addEventListener("click", startGame) //? Comment this out to style the grid in CSS!
-
-document.addEventListener('keyup', keysGunAction)
 
 const playAgainButton = document.querySelector(".play-again-button")
 playAgainButton.addEventListener("click", playAgainButtonClicked)
@@ -77,14 +75,13 @@ playAgainButton.addEventListener("click", playAgainButtonClicked)
 
 const music = document.querySelector("#music")
 music.loop = true
-startButton.addEventListener("click", playMusic) //! Need to set this music audio up properly
+startButton.addEventListener("click", playMusic)
 
 let musicOn = true
 
 const musicButton = document.querySelector(".music-button")
 musicButton.addEventListener("click", musicButtonClicked)
 
-//! playAudio
 
 function playMusic() {
   if (musicOn) {
@@ -97,13 +94,13 @@ function playMusic() {
 
 function musicButtonClicked(event) {
   console.log("Music button clicked")
-  if (event.target.innerText === "Turn Music Off") {
+  if (event.target.innerText === "Turn Music OFF") {
     musicOn = false
-    event.target.innerText = "Turn Music On"
+    event.target.innerText = "Turn Music ON"
     playMusic()
-  } else if (event.target.innerText === "Turn Music On") {
+  } else if (event.target.innerText === "Turn Music ON") {
     musicOn = true
-    event.target.innerText = "Turn Music Off"
+    event.target.innerText = "Turn Music OFF"
     playMusic()
   }
 }
@@ -180,6 +177,8 @@ function startGame() {
 
   console.log("startGame() function called")
 
+  document.addEventListener('keyup', keysGunAction) // Moved from global scope to here to prevent key shortcuts to open Dev Tools throwing errors in the console
+
   gameScreen.classList.remove("hidden")
 
   // endScreen.style.display = "none"
@@ -234,7 +233,7 @@ function startGame() {
 
         console.log("dinos at bottom of grid or no dinos left on grid - call endGame function")
 
-        // endGame() //? Comment this out to style the grid in CSS!
+        endGame() //? Comment this out to style the grid in CSS!
 
       } else {
 

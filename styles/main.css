@@ -126,11 +126,32 @@ body {
   align-items: center;
   width: 100%;
   height: 6vh;
+  min-height: 50px;
   border-top-right-radius: 25px;
   border-top-left-radius: 25px;
 }
 
+.music-button {
+  font-family: 'VT323', monospace;
+  /* font-family: 'Share Tech Mono', monospace; */
+  /* font-family: 'Press Start 2P', cursive; */
+  font-size: 1.4em;
+  cursor: pointer;
+  height: 28px;
+  width: 150px;
+  background: #FFE045;
+  border: 2px solid red;
+  border-radius: 30px;
+}
 
+.score-paragraph, .lives-paragraph {
+  font-family: 'VT323', monospace;
+  font-size: 1.5em;
+}
+
+.score-display, .lives-display {
+  color: #FFE045;
+}
 
 /* Grid */
 
