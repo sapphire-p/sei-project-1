@@ -142,8 +142,8 @@ body {
   z-index: 0;
   height: 100%;
   width: 100%;
-  /* border-bottom-right-radius: 25px;
-  border-bottom-left-radius: 25px; */
+  border-bottom-right-radius: 25px;
+  border-bottom-left-radius: 25px;
 }
 
 .grid {
@@ -169,7 +169,7 @@ body {
 }
 
 .gun {
-  background-image: url("../assets/Gun-turret.png");
+  background-image: url("../assets/Tank.png");
   background-repeat: no-repeat;
   background-size: contain;
 }
@@ -198,17 +198,26 @@ body {
   background-size: contain;
 }
 
+.road-barricade {
+  background-image: url("../assets/Road-barricade.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 10px;
+}
+
 .fence {
   background-image: url("../assets/Fence.png");
   background-repeat: no-repeat;
   background-size: cover;
 }
 
-.fence-corners {
-  border-bottom-right-radius: 25px;
+.left-fence-corner {
   border-bottom-left-radius: 25px;
 }
 
+.right-fence-corner {
+  border-bottom-right-radius: 25px;
+}
 
 /* ANIMATIONS */
 

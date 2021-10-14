@@ -96,8 +96,14 @@ function createGrid() {
   for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
     const cell = document.createElement("div")
     // cell.innerText = i
-    if (i > (width * width - (width + 1))) { // This adds a class of fence to the bottom row of the grid
+    if ((i > (width * width - (width + 1))) && i !== 114 && i !== 115 && i !== 116) { // This adds a class of fence to the bottom row of the grid
       cell.classList.add(fenceClass)
+    }
+    if (i === ((width * width) - width)) { // This adds a class of left-fence-corner to the bottom left corner cell of the grid
+      cell.classList.add("left-fence-corner")
+    }
+    if (i === ((width * width) - 1)) { // This adds a class of right-fence-corner to the bottom right corner cell of the grid
+      cell.classList.add("right-fence-corner")
     }
     grid.appendChild(cell)
     cells.push(cell)
@@ -123,20 +129,6 @@ function playAgainButtonClicked() {
   cells = [] // In case a game has already been played, this resets the cells array to an empty array, ready to receive a fresh set of cell indexes
 
   createGrid()
-  // for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
-  //   const cell = document.createElement("div")
-  //   // cell.innerText = i
-  //   if (i > (width * width - (width + 1))) { // This adds a class of fence to the bottom row of the grid
-  //     cell.classList.add(fenceClass)
-  //   }
-  //   grid.appendChild(cell)
-  //   cells.push(cell)
-  // }
-
-  // gunCurrentPosition = gunStartPosition
-  // addItem(gunClass, gunCurrentPosition)
-  // dinosCurrentPosition = dinosStartPosition
-  // addItem(dinoClass, dinosCurrentPosition)
 
   scoreDisplay.innerText = score
   livesDisplay.innerText = livesRemaining
@@ -181,20 +173,6 @@ function startGame() {
   cells = [] // In case a game has already been played, this resets the cells array to an empty array, ready to receive a fresh set of cell indexes
 
   createGrid()
-  // for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
-  //   const cell = document.createElement("div")
-  //   // cell.innerText = i
-  //   if (i > (width * width - (width + 1))) { // This adds a class of fence to the bottom row of the grid
-  //     cell.classList.add(fenceClass)
-  //   }
-  //   grid.appendChild(cell)
-  //   cells.push(cell)
-  // }
-
-  // gunCurrentPosition = gunStartPosition
-  // addItem(gunClass, gunCurrentPosition)
-  // dinosCurrentPosition = dinosStartPosition
-  // addItem(dinoClass, dinosCurrentPosition)
 
   setTimeout(() => {
 
@@ -222,7 +200,7 @@ function startGame() {
 
         console.log("dinos at bottom of grid or no dinos left on grid - call endGame function")
 
-        endGame() //? Comment this out to style the grid in CSS!
+        // endGame() //? Comment this out to style the grid in CSS!
 
       } else {
 
