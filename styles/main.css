@@ -25,7 +25,9 @@ body {
   width: 100%;
   height: 70%;
   min-height: 600px;
-  /* 'display:' property lives in side start-screen-container or end-screen-container class to control visibility */
+  min-width: 600px;
+  /* Additional 'display: none' property lives inside 'hidden' class for start-screen-container and end-screen-container class, to control visibility */
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -36,17 +38,15 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 2vh;
+  font-size: 1.1em;
 }
 
 .start-screen-container {
-  /* change display: to 'flex' when you want start-screen-container to be visible */
   display: flex;
   z-index: 1;
 }
 
 .end-screen-container {
-  /* change display: to 'flex' when you want start-screen-container to be visible */
   display: flex;
   z-index: 2;
 }
@@ -58,6 +58,44 @@ body {
 
 
 /* Start-screen detail */
+
+.start-screen-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  text-align: center;
+  height: 100%;
+  min-height: 600px;
+  min-width: 600px;
+  margin: 0 230px;
+}
+
+.jurassic-escapers-logo-container {
+  display: flex;
+}
+
+.instructions-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 600px;
+  margin: 18px;
+  /* padding: 20px 16vw; */
+}
+
+p {
+  /* display: flex;
+  flex-direction: column; */
+  margin: 8px 0;
+}
+
+.start-button-container {
+  display: flex;
+}
+
+
+
 
 .tm-symbol {
   font-family: Arial, Helvetica, sans-serif;
@@ -74,12 +112,28 @@ body {
   color: #FFE045;
 }
 
-.start-button {
+.start-button, .play-again-button {
   cursor: pointer;
-  height: 30px;
-  width: 100px;
+  height: 40px;
+  width: 20vw;
   background: #FFE045;
+  border: 4px solid red;
   border-radius: 30px;
+  font-family: 'VT323', monospace;
+  /* font-size: 1.5em; */
+  font-size: 32px;
+  color: black;
+  line-height: 0;
+}
+
+.start-button {
+  max-width: 200px;
+  min-width: 100px;
+}
+
+.play-again-button {
+  max-width: 200px;
+  min-width: 200px;
 }
 
 /* End-screen detail */
@@ -95,13 +149,13 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* background: powderblue; */
   background-image: url("../assets/Jungle-leaves-background.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
   height: 70%;
   min-height: 600px;
+  min-width: 600px;
 }
 
 .game-container {
@@ -250,18 +304,29 @@ body {
 /* ANIMATIONS */
 
 
-h1 {
-  /* animation: animate__bounce infinite */
-  animation-name: animate__bounce;
-  animation-iteration-count: 5;
-  animation-delay: 2s;
-}
 
-.jurassic-escapers-logo-div {
+
+.jurassic-escapers-logo-container {
   animation-name: animate__bounce;
   animation-delay: 500ms;
   animation-duration: 1.5s;
 }
+
+
+/* h1 {
+  animation-name: animate__bounce;
+  animation-iteration-count: 5;
+  animation-delay: 2s;
+}
+ */
+
+
+
+
+
+
+
+
 
 /* .animate__animated.animate__fadeOutRight {
   animation-duration: 2s;
