@@ -52,7 +52,7 @@ body {
 }
 
 /* The CSS selector below (i.e. .class1.class2 syntax) means if an element has both a class of class1 AND a class of class2 at the same time: */
-.start-screen-container.hidden, .end-screen-container.hidden { 
+.start-screen-container.hidden, .end-screen-container.hidden, .game-screen-container.hidden { 
   display: none;
 }
 

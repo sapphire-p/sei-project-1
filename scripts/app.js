@@ -10,6 +10,8 @@ let cells = []
 
 const startScreen = document.querySelector(".start-screen-container")
 const endScreen = document.querySelector(".end-screen-container")
+const gameScreen = document.querySelector(".game-screen-container")
+gameScreen.classList.add("hidden")
 
 // Scoring variables
 
@@ -152,7 +154,7 @@ function startGame() {
 
   console.log("startGame() function called")
 
-
+  gameScreen.classList.remove("hidden")
 
   // endScreen.style.display = "none"
   endScreen.classList.add("hidden")
