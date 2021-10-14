@@ -62,10 +62,10 @@ let explosionSpeed = 300
 
 // Event Listeners
 
-// window.addEventListener('DOMContentLoaded', playAudio)
+// window.addEventListener('DOMContentLoaded', playAudio) //! Need to set this music audio up properly
 
 const startButton = document.querySelector(".start-button")
-startButton.addEventListener("click", startGame) //? Comment this out to style the grid in CSS!
+// startButton.addEventListener("click", startGame) //? Comment this out to style the grid in CSS!
 
 document.addEventListener('keyup', keysGunAction)
 
@@ -76,17 +76,17 @@ playAgainButton.addEventListener("click", playAgainButtonClicked)
 /* startGame function */ //! 
 
 //? Comment this in to style the grid in CSS!
-// for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
-//   const cell = document.createElement("div")
-//   cell.innerText = i
-//   if (i > (width * width - (width + 1))) { // This adds a class of fence to the bottom row of the grid
-//     cell.classList.add(fenceClass)
-//   }
-//   grid.appendChild(cell)
-//   cells.push(cell)
-// }
+for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
+  const cell = document.createElement("div")
+  cell.innerText = i
+  if (i > (width * width - (width + 1))) { // This adds a class of fence to the bottom row of the grid
+    cell.classList.add(fenceClass)
+  }
+  grid.appendChild(cell)
+  cells.push(cell)
+}
 
-// startGame() //!
+startGame() //!
 
 
 function playAgainButtonClicked() {
@@ -102,7 +102,7 @@ function playAgainButtonClicked() {
 
   for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
     const cell = document.createElement("div")
-    cell.innerText = i
+    // cell.innerText = i
     if (i > (width * width - (width + 1))) { // This adds a class of fence to the bottom row of the grid
       cell.classList.add(fenceClass)
     }
@@ -159,7 +159,7 @@ function startGame() {
 
   for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
     const cell = document.createElement("div")
-    cell.innerText = i
+    // cell.innerText = i
     if (i > (width * width - (width + 1))) { // This adds a class of fence to the bottom row of the grid
       cell.classList.add(fenceClass)
     }
@@ -198,7 +198,7 @@ function startGame() {
 
         console.log("dinos at bottom of grid or no dinos left on grid - call endGame function")
 
-        endGame()
+        // endGame() //? Comment this out to style the grid in CSS!
 
       } else {
 

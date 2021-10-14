@@ -45,6 +45,21 @@ body {
   z-index: 1;
 }
 
+.tm-symbol {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+
+.arrow-keys-symbols {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.5em;
+  color: yellow;
+}
+
+.space-bar-text {
+  color: yellow;
+}
+
 /* The CSS selector below (i.e. .class1.class2 syntax) means if an element has both a class of class1 AND a class of class2 at the same time: */
 .start-screen-container.hidden, .end-screen-container.hidden { 
   display: none;
@@ -57,6 +72,14 @@ body {
 }
 
 
+.start-button {
+  cursor: pointer;
+  height: 30px;
+  width: 100px;
+  background: yellow;
+  border-radius: 30px;
+}
+
 /* GAME */
 
 .game-screen-container {
@@ -65,7 +88,7 @@ body {
   align-items: center;
   justify-content: center;
   /* background: powderblue; */
-  background-image: url("../assets/River-jungle.jpg");
+  background-image: url("../assets/Jungle-leaves-background.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
@@ -83,20 +106,20 @@ body {
   min-width: 500px;
 }
 
-.start-button {
-  cursor: pointer;
-  height: 30px;
-  width: 100px;
-  background: yellow;
-  border-radius: 30px;
-}
+
 
 /* Grid */
+
+
+
 
 .grid-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-image: url("../assets/Sand-background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
   z-index: 0;
 }
 
@@ -113,12 +136,12 @@ body {
 }
 
 .grid div {
-  border: 1px solid lightgrey;
+  /* border: 1px solid lightgrey; */
   flex-grow: 1;
   height: 9.0909%;
   width: 9.0909%;
   color: grey;
-  background-color: wheat;
+  /* background-color: wheat; */
 }
 
 .gun {
@@ -165,6 +188,12 @@ h1 {
   animation-name: animate__bounce;
   animation-iteration-count: 5;
   animation-delay: 2s;
+}
+
+.jurassic-escapers-logo-div {
+  animation-name: animate__bounce;
+  animation-delay: 500ms;
+  animation-duration: 1.5s;
 }
 
 /* .animate__animated.animate__fadeOutRight {
