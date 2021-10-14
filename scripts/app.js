@@ -22,6 +22,9 @@ const scoreDisplay = document.querySelector(".score-display")
 const livesDisplay = document.querySelector(".lives-display")
 const finalScoreDisplay = document.querySelector(".final-score-display")
 
+const gameResult = document.querySelector(".game-result")
+const gameComment = document.querySelector(".game-comment")
+
 // Gun, Dinos, Missile, Rock position and class variables
 
 const gunStartPosition = 104 // index number
@@ -294,6 +297,14 @@ function endGame() {
   // Stores final score value in a new variable and displays it on the end-screen:
   let finalScore = score
   finalScoreDisplay.innerText = finalScore
+
+  if (finalScore >= 2000) {
+    gameResult.innerText = "GREAT JOB"
+    gameComment.innerText = "Perfect score! No dinos escaped."
+  } else {
+    gameResult.innerText = "GAME OVER"
+    gameComment.innerText = "Some dinos escaped...better luck next time!"
+  }
 
   // Resets score and livesRemaining to their initial values, ready for next game:
   score = 0
