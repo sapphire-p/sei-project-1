@@ -35,7 +35,6 @@ const dinosStartPosition = [4, 5, 6, 14, 15, 16, 17, 18, 24, 25, 26, 27, 28, 29,
 let dinosCurrentPosition // to contain an array of index numbers
 
 let dinosDirection = "right" // This variable stores the direction of movement of the dinos (initialised at "right")
-let dinoCounter // a variable added to help control the movement of the dinos so that when they move down, they only move down one cell
 const dinoClass = "dino"
 
 let missileCurrentPosition // stores an index number
@@ -186,33 +185,45 @@ function startGame() {
 
       } else {
 
-        const anyDinosOnTheEdge = dinosCurrentPosition.some(dino => { // This .some() array method determines if ANY dinos are on the left or right edge of the grid
-          return ((dino % width === width - 1) || (dino % width === 0))
+        const anyDinosOnTheRightEdge = dinosCurrentPosition.some(dino => { // This .some() array method determines if ANY dinos are on the right edge of the grid
+          return dino % width === width - 1
+        })
+        const anyDinosOnTheLeftEdge = dinosCurrentPosition.some(dino => { // This .some() array method determines if ANY dinos are on the left edge of the grid
+          return dino % width === 0
         })
 
-        if (anyDinosOnTheEdge && !dinoCounter) { // If any dinos are on the edge AND dinoCounter is not indicating (with a truthy 1) that a down movement has just been performed, *go down*, and then *change direction and move one sideways*
-          // Remember, on the line above, since 'anyDinosOnTheEdge' will either be a boolean true or false, simply 'anyDinosOnTheEdge' can be used instead of 'anyDinosOnTheEdge === true'
-          dinoCounter++
-          removeItem(dinoClass, dinosCurrentPosition) // -*go down*
-          dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-            return dinoPosition += width
-          })
-          dinosDirection = dinosDirection === 'right' ? 'left' : 'right' // -*change direction and move one sideways* // ternary operator that switches the value of dinosDirection (from right to left, or else left to right)
-          addItem(dinoClass, dinosCurrentPosition)
-        } else if (dinosDirection === 'left') { // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "left", move dinos left
-          dinoCounter = 0
-          removeItem(dinoClass, dinosCurrentPosition)
-          dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-            return dinoPosition -= 1
-          })
-          addItem(dinoClass, dinosCurrentPosition)
-        } else if (dinosDirection === 'right') { // Else if no dinos are on the edge, and globally-scoped dinosDirection variable is equal to "right", move dinos right
-          dinoCounter = 0
-          removeItem(dinoClass, dinosCurrentPosition)
-          dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-            return dinoPosition += 1
-          })
-          addItem(dinoClass, dinosCurrentPosition)
+
+        if (dinosDirection === "left") {
+          if (anyDinosOnTheLeftEdge) { // If there are any dinos on the left edge, all dinos to move down one cell
+            removeItem(dinoClass, dinosCurrentPosition)
+            dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+              return dinoPosition += width
+            })
+            dinosDirection = "right" // Updates global scope dinosDirection variable to the opposite direction, so that once the dinos have gone down one, they will then move in the opposite direction
+            addItem(dinoClass, dinosCurrentPosition)
+          } else {
+            removeItem(dinoClass, dinosCurrentPosition)
+            dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+              return dinoPosition -= 1
+            })
+            addItem(dinoClass, dinosCurrentPosition)
+          }
+        } else if (dinosDirection === "right") {
+          if (anyDinosOnTheRightEdge) {
+            removeItem(dinoClass, dinosCurrentPosition) // If there are any dinos on the right edge, all dinos to move down one cell
+            dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+              return dinoPosition += width
+            })
+            dinosDirection = "left" // Updates global scope dinosDirection variable to the opposite direction, so that once the dinos have gone down one, they will then move in the opposite direction
+            addItem(dinoClass, dinosCurrentPosition)
+            return
+          } else {
+            removeItem(dinoClass, dinosCurrentPosition)
+            dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
+              return dinoPosition += 1
+            })
+            addItem(dinoClass, dinosCurrentPosition)
+          }
         }
 
         if (!anyDinosOnPenultimateRow && anyDinosLeftOnGrid) { // This conditional statement fixes the bug where the handleRock() function was throwing errors as it was still trying to find dinosEligibleToThrowRock (which comes before rockTimer begins) before the dinosTimer was stopped at its next loop
