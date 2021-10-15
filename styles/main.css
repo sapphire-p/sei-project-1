@@ -131,6 +131,12 @@ body {
   min-width: 200px;
 }
 
+.start-button:hover, .play-again-button:hover {
+  background: red;
+  border: 4px solid #FFE045;
+  color: white;
+}
+
 /** End-screen detail **/
 
 
@@ -212,6 +218,12 @@ h1 {
   background: #FFE045;
   border: 2px solid red;
   border-radius: 30px;
+}
+
+.music-button:hover {
+  background: red;
+  border: 2px solid #FFE045;
+  color: white;
 }
 
 .score-paragraph, .lives-paragraph {
