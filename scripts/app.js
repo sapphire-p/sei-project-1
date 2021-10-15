@@ -32,17 +32,16 @@ let gunCurrentPosition // = 104 // index number
 const gunClass = "gun"
 
 const dinosStartPosition = [4, 5, 6, 14, 15, 16, 17, 18, 24, 25, 26, 27, 28, 29, 30, 36, 37, 38, 39, 40] // array of index numbers - 20 dinos for start of game
-let dinosCurrentPosition // = [4, 5, 6, 14, 15, 16, 17, 18, 24, 25, 26, 27, 28, 29, 30, 36, 37, 39, 40] // array of index numbers
-// Old dinosaur formation array: [4, 5, 6, 14, 15, 16, 17, 18, 24, 25, 26, 27, 28, 29, 30, 36, 37, 38, 39, 40, 48, 50] of 22 dinos
+let dinosCurrentPosition // to contain an array of index numbers
 
 let dinosDirection = "right" // This variable stores the direction of movement of the dinos (initialised at "right")
 let dinoCounter // a variable added to help control the movement of the dinos so that when they move down, they only move down one cell
 const dinoClass = "dino"
 
-let missileCurrentPosition // index number
+let missileCurrentPosition // stores an index number
 const missileClass = "missile"
 
-let rockCurrentPosition // index number
+let rockCurrentPosition // stores an index number
 const rockClass = "rock"
 
 const explosionClass = "explosion"
@@ -68,7 +67,7 @@ let explosionSpeed = 320 // 300-320 usually
 // startButton and playAgainButton Event Listeners
 
 const startButton = document.querySelector(".start-button")
-startButton.addEventListener("click", startGame) //? Comment this out to style the grid in CSS!
+startButton.addEventListener("click", startGame)
 
 const playAgainButton = document.querySelector(".play-again-button")
 playAgainButton.addEventListener("click", playAgainButtonClicked)
@@ -109,41 +108,27 @@ function musicButtonClicked(event) {
 }
 
 
-/* startGame function */ //! 
-
-//? Comment this in to style the grid in CSS!
-// for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
-//   const cell = document.createElement("div")
-//   cell.innerText = i
-//   if (i > (width * width - (width + 1))) { // This adds a class of fence to the bottom row of the grid
-//     cell.classList.add(fenceClass)
-//   }
-//   grid.appendChild(cell)
-//   cells.push(cell)
-// }
-
-// startGame() //!
 
 
 
 function createGrid() {
   for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
     const cell = document.createElement("div")
-    // cell.innerText = i
+    // cell.innerText = i //? Comment this in if you want to see the cell index numbers on the grid cells
     if ((i > (width * width - (width + 1))) && i !== 114 && i !== 115 && i !== 116) { // This adds a class of fence to the bottom row of the grid
       cell.classList.add(fenceClass)
     }
-    if (i === ((width * width) - width)) { // This adds a class of left-fence-corner to the bottom left corner cell of the grid
+    if (i === ((width * width) - width)) { // This adds a class of left-fence-corner to the bottom left corner cell of the grid (for a rounded bottom-left corner)
       cell.classList.add("left-fence-corner")
     }
-    if (i === ((width * width) - 1)) { // This adds a class of right-fence-corner to the bottom right corner cell of the grid
+    if (i === ((width * width) - 1)) { // This adds a class of right-fence-corner to the bottom right corner cell of the grid (for a rounded bottom-right corner)
       cell.classList.add("right-fence-corner")
     }
     grid.appendChild(cell)
     cells.push(cell)
   }
 
-  gunCurrentPosition = gunStartPosition
+  gunCurrentPosition = gunStartPosition // Positions and displays gun and dinos in their starting positions
   addItem(gunClass, gunCurrentPosition)
   dinosCurrentPosition = dinosStartPosition
   addItem(dinoClass, dinosCurrentPosition)
@@ -153,14 +138,14 @@ function createGrid() {
 
 function playAgainButtonClicked() {
 
-  if (grid.hasChildNodes) { // If a grid already exists from a previosuly game, this block of code removes the grid by removing the grid's child elements one by one
+  if (grid.hasChildNodes) { // If a grid already exists from a previous game, this block of code removes the grid by removing the grid's child elements one by one
     let gridChildElementCount = grid.childElementCount
     for (i = 0; i < gridChildElementCount; i++) {
       grid.lastChild.remove()
     }
   }
 
-  cells = [] // In case a game has already been played, this resets the cells array to an empty array, ready to receive a fresh set of cell indexes
+  cells = [] // In case a game has already been played, this resets the cells array to an empty array, ready to receive a fresh set of cell indexes when the new grid is created
 
   createGrid()
 
@@ -176,19 +161,16 @@ function playAgainButtonClicked() {
 }
 
 
+
+/* startGame function */
+
 function startGame() {
 
-  console.log("startGame() function called")
-
-  document.addEventListener('keyup', keysGunAction) // Moved from global scope to here to prevent key shortcuts to open Dev Tools throwing errors in the console
+  document.addEventListener('keyup', keysGunAction) // Moved from global scope to here in order to prevent key shortcuts to open Dev Tools throwing errors in the console
 
   gameScreen.classList.remove("hidden")
-
-  // endScreen.style.display = "none"
   endScreen.classList.add("hidden")
   endScreen.classList.remove("animate__fadeInLeft")
-
-
   startScreen.classList.add("animate__fadeOutRight")
 
   setTimeout(() => {
@@ -198,8 +180,7 @@ function startGame() {
   scoreDisplay.innerText = score
   livesDisplay.innerText = livesRemaining
 
-
-  if (grid.hasChildNodes) { // If a grid already exists from a previosuly game, this block of code removes the grid by removing the grid's child elements one by one
+  if (grid.hasChildNodes) { // If a grid already exists from a previous game, this block of code removes the grid by removing the grid's child elements one by one
     let gridChildElementCount = grid.childElementCount
     for (i = 0; i < gridChildElementCount; i++) {
       grid.lastChild.remove()
@@ -212,40 +193,32 @@ function startGame() {
 
   setTimeout(() => {
 
-    console.log("Get ready to play!")
-
     dinosTimer = setInterval(() => {
 
-      const anyDinosAtBottom = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the bottom row of the grid
+      const anyDinosAtBottom = dinosCurrentPosition.some(dino => { // This .some() array method determines if ANY dinos are on the bottom row of the grid
         return (((width * width) - dino) <= width)
       })
-      console.log("anyDinosAtBottom", anyDinosAtBottom)
 
       const anyDinosOnPenultimateRow = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the penultimate row of the grid
         return (((width * width) - dino) <= width * 2)
       })
-      console.log("anyDinosOnPenultimateRow", anyDinosOnPenultimateRow)
 
-      const anyDinosLeftOnGrid = cells.some(cell => { // Checks if there are no dinos present on the grid
+      const anyDinosLeftOnGrid = cells.some(cell => { // Checks for if there are no dinos present on the grid
         return cell.classList.contains(dinoClass) // if there are any dinos present on the grid, anyDinosLeftOnGrid is true, else anyDinosLeftOnGrid is false
       })
-      console.log("anyDinosLeftOnGrid", anyDinosLeftOnGrid)
 
+      if (anyDinosAtBottom || !anyDinosLeftOnGrid) { // If any dinos reach the bottom of the grid or there are no dinos left on the grid, the endGame() function is called
 
-      if (anyDinosAtBottom || !anyDinosLeftOnGrid) { // If the dinos reach the bottom of the grid or there are not dinos left on grid, the endGame() function is called
-
-        console.log("dinos at bottom of grid or no dinos left on grid - call endGame function")
-
-        endGame() //? Comment this out to style the grid in CSS!
+        endGame()
 
       } else {
 
-        const anyDinosOnTheEdge = dinosCurrentPosition.some(dino => { // This .some() array method determines if any dinos are on the left or right edge of the grid
+        const anyDinosOnTheEdge = dinosCurrentPosition.some(dino => { // This .some() array method determines if ANY dinos are on the left or right edge of the grid
           return ((dino % width === width - 1) || (dino % width === 0))
         })
 
         if (anyDinosOnTheEdge && !dinoCounter) { // If any dinos are on the edge AND dinoCounter is not indicating (with a truthy 1) that a down movement has just been performed, *go down*, and then *change direction and move one sideways*
-          // Remember, on the line above, since 'anyDinosOnTheEdge' will either be a boolean true or false, you do not need to write 'anyDinosOnTheEdge === true'
+          // Remember, on the line above, since 'anyDinosOnTheEdge' will either be a boolean true or false, simply 'anyDinosOnTheEdge' can be used instead of 'anyDinosOnTheEdge === true'
           dinoCounter++
           removeItem(dinoClass, dinosCurrentPosition) // -*go down*
           dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
@@ -270,7 +243,7 @@ function startGame() {
         }
 
         if (!anyDinosOnPenultimateRow && anyDinosLeftOnGrid) { // This conditional statement fixes the bug where the handleRock() function was throwing errors as it was still trying to find dinosEligibleToThrowRock (which comes before rockTimer begins) before the dinosTimer was stopped at its next loop
-          handleRock() // This way, the rock throwing function stops being called when the dinos reach the penultimate grid row (or if no dinos left on grid)
+          handleRock() // This way, the rock throwing function stops being called when the dinos reach the penultimate grid row (or if no dinos are left on the grid - though this should have already triggered the endGame() function earlier in this dinosTimer setInterval)
         }
 
       }
@@ -286,8 +259,6 @@ function startGame() {
 /* endGame function */
 
 function endGame() {
-
-  console.log("endGame function called")
 
   // All Timers are cleared:
   clearInterval(dinosTimer)
@@ -310,20 +281,12 @@ function endGame() {
   score = 0
   livesRemaining = 3
 
-  console.log(score)
-  console.log(finalScore)
-
-
-  // endScreen.style.display = "flex"
-
   endScreen.classList.remove("hidden")
   endScreen.classList.add("animate__fadeInLeft")
   endScreen.classList.remove("animate__fadeOutRight")
 
-  // startScreen.style.display = "none"
-
   startScreen.classList.add("hidden")
-  startScreen.classList.remove("animate__fadeOutRight") // Not sure if this is strictly necessary, as the start-screen is only shown once at the very start
+  startScreen.classList.remove("animate__fadeOutRight") // Not strictly necessary, as the start-screen is only shown once at the very start when the page is loaded
 
 }
 
@@ -333,22 +296,22 @@ function endGame() {
 
 
 function addItem(itemClass, position) {
-  // The following control flow with conditional logic says "If itemClass is gunClass, do this, else if itemClass is dinoClass, do this"
+  // The following control flow with conditional logic says "If itemClass is gunClass/missileClass/rockClass, do this, else if itemClass is dinoClass, do this"
   if (itemClass === gunClass || itemClass === missileClass || itemClass === rockClass) {
     cells[position].classList.add(itemClass)
   } else if (itemClass === dinoClass) {
-    position.forEach(dinoPosition => { // Here, "position" will be either dinosStartPosition array, or dinosCurrentPosition array
+    position.forEach(dinoPosition => {
       cells[dinoPosition].classList.add(itemClass)
     })
   }
 }
 
 function removeItem(itemClass, position) {
-  // The following control flow with conditional logic says "If itemClass is gunClass, do this, else if itemClass is dinoClass, do this"
+  // The following control flow with conditional logic says "If itemClass is gunClass/missileClass/rockClass, do this, else if itemClass is dinoClass, do this"
   if (itemClass === gunClass || itemClass === missileClass || itemClass === rockClass) {
     cells[position].classList.remove(itemClass)
   } else if (itemClass === dinoClass) {
-    position.forEach(dinoPosition => { // Here, "position" will be either dinosStartPosition array, or dinosCurrentPosition array
+    position.forEach(dinoPosition => {
       cells[dinoPosition].classList.remove(itemClass)
     })
   }
@@ -360,23 +323,20 @@ function removeItem(itemClass, position) {
 
 
 function keysGunAction(event) {
-  console.log("keysGunAction() function called")
+
   const key = event.keyCode
 
   removeItem(gunClass, gunCurrentPosition)
 
-  if (key === 39 && gunCurrentPosition !== (width * width) - (width + 1)) {
-    // console.log("Gun moves RIGHT")
-    gunCurrentPosition++
-  } else if (key === 37 && gunCurrentPosition !== width * (width - 2)) {
-    // console.log("Gun moves LEFT")
-    gunCurrentPosition--
-  } else if (key === 32) { // Space bar is key 32, if you want to change it to up arrow, up arrow is 38
+  if (key === 39 && gunCurrentPosition !== (width * width) - (width + 1)) { // Key 39 is the right arrow key
+    gunCurrentPosition++ // updates gunPosition to one cell RIGHT of its current position
+  } else if (key === 37 && gunCurrentPosition !== width * (width - 2)) { // Key 37 is the left arrow key
+    gunCurrentPosition-- // updates gunPosition to one cell LEFT of its current position
+  } else if (key === 32) { // Key 32 is the Space bar key
     event.preventDefault()
-    // console.log("Space bar makes Gun fire Missile")
-    handleMissile()
+    handleMissile() // Tapping the space bar calls the function to launch the missile
   } else {
-    console.log("Key is invalid")
+    addItem(gunClass, gunCurrentPosition)
   }
 
   addItem(gunClass, gunCurrentPosition)
@@ -404,7 +364,7 @@ function handleMissile() {
     missileCurrentPosition = gunCurrentPosition - width // This updates missileCurrentPosition to the index number one above the gun's current position
     addItem(missileClass, missileCurrentPosition) // This displays the missile in its new position above the gun
 
-    missileTimer = setInterval(() => { // This setInterval loops and makes the missile appear to move up one cell every second, until it reaches the top of the grid
+    missileTimer = setInterval(() => { // This setInterval loops and makes the missile appear to move up one cell periodically, until it reaches the top of the grid
 
       let missileDinoCollision
       let cellIndexOfMissileDinoCollision
@@ -414,8 +374,6 @@ function handleMissile() {
           missileDinoCollision = true // if there is a missile AND a dino present on the same cell on the grid, missileDinoCollision updates to true
           cellIndexOfMissileDinoCollision = cells.indexOf(cell) // This stores the grid index of the missile/dino collision in a variable
           indexOfCollisionCellInDinosCurrentPosition = dinosCurrentPosition.indexOf(cellIndexOfMissileDinoCollision) // The cellIndexOfMissileDinoCollision is one of the numbers inside the dinosCurrentPosition array. This stores the index of its position in the dinosCurrentPosition array
-          console.log(cellIndexOfMissileDinoCollision)
-          console.log(indexOfCollisionCellInDinosCurrentPosition)
         }
       })
 
@@ -425,7 +383,6 @@ function handleMissile() {
         if (cell.classList.contains(missileClass) && cell.classList.contains(rockClass)) {
           missileRockCollision = true // if there is a missile AND a rock present on the same cell on the grid, missileRockCollision updates to true
           cellIndexOfMissileRockCollision = cells.indexOf(cell) // This stores the grid index of the missile/dino collision in a variable
-          console.log(cellIndexOfMissileRockCollision)
         }
       })
 
@@ -449,7 +406,7 @@ function handleMissile() {
           cells[cellIndexOfMissileRockCollision].classList.remove(explosionClass)
         }, explosionSpeed)
         clearInterval(missileTimer)
-        clearInterval(rockTimer) //! This should clear the rockTimer and avoid any rocks continuing to fall after missile-rock collision, but sometimes the missiles do not stop the rocks - may be to do with a discrepancy between the handleMissile() function timing and the handleRock() function timing
+        clearInterval(rockTimer) // This should clear the rockTimer and avoid any rocks continuing to fall after missile-rock collision
       } else if (missileCurrentPosition < width) { // If the missile reaches the top of the grid, the missile is removed and the missileTimer is cleared
         removeItem(missileClass, missileCurrentPosition)
         clearInterval(missileTimer)
@@ -478,8 +435,7 @@ function handleRock() {
     }
   })
 
-  if (gridContainsRock === true) { // if there is already a rock on the grid
-    // console.log("There is already a rock on the grid - one rock at a time")
+  if (gridContainsRock === true) { // if there is already a rock on the grid - it is only possible for one rock to be on the grid at a time
     return
   } else { // identify dinos eligible to throw a rock, randomly select one and position the rock in the cell below it, before starting the rockTimer
     let dinosEligibleToThrowRock = []
@@ -488,15 +444,12 @@ function handleRock() {
         dinosEligibleToThrowRock.push(dino)
       }
     })
-    console.log(dinosEligibleToThrowRock)
 
     let dinoToThrowRock
     dinoToThrowRock = dinosEligibleToThrowRock[Math.floor(Math.random() * dinosEligibleToThrowRock.length)]
-    console.log(dinoToThrowRock)
 
     rockCurrentPosition = dinoToThrowRock + width // This updates rockCurrentPosition to the index number one below the rock-throwing-dino's current position
     addItem(rockClass, rockCurrentPosition)
-
 
     rockTimer = setInterval(() => {
 
@@ -506,7 +459,6 @@ function handleRock() {
         if (cell.classList.contains(rockClass) && cell.classList.contains(gunClass)) {
           rockGunCollision = true // if there is a rock AND a gun present on the same cell on the grid, rockGunCollision updates to true
           cellIndexOfRockGunCollision = cells.indexOf(cell) // This stores the grid index of the rock/gun collision in a variable
-          console.log(cellIndexOfRockGunCollision)
         }
       })
 
@@ -527,7 +479,6 @@ function handleRock() {
           }, explosionSpeed)
         }
         clearInterval(rockTimer)
-        //? NB: Rock-Missile (missile-rock) collision should already be handled inside the handlemissile() function, but it may need tweaking so that it clears the rockTimer setInterval
       } else if ((width * width) - rockCurrentPosition <= width) { // If the rock reaches the bottom of the grid, the rock is removed and the rockTimer is cleared
         removeItem(rockClass, rockCurrentPosition)
         clearInterval(rockTimer)
@@ -541,65 +492,3 @@ function handleRock() {
   }
 }
 
-
-
-
-
-
-
-
-//!
-//!
-//? Some code snippets to help with dinos movement functionality:
-
-// dinosTimer = setInterval(() => { //* dinosTimer setInterval to control the movement of the dinos every dinosSpeed (1 second)
-// }, dinosSpeed)
-
-// if ((dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) || (dinosCurrentPosition[0] % width === 0)) //* This conditional logic states: "If: last dino is in the right-most cell of the grid *OR* first dino is in the left-most cell of the grid"
-
-// if (dinosCurrentPosition[dinosCurrentPosition.length - 1] % width === width - 1) //* This conditional logic states: "If: last dino is in the right-most cell of the grid"
-
-// if (dinosCurrentPosition[0] % width === 0) //* This conditional logic states: "If: first dino is in the left-most cell of the grid"
-
-//* This moves all the dinos one cell to the right:
-// removeItem(dinoClass, dinosCurrentPosition)
-// dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => { //? map returns a new array of equal length
-//   return dinoPosition += 1 //? This updates the position of each dino to one cell to the right, by adding one to each dino index number
-// })
-// addItem(dinoClass, dinosCurrentPosition)
-
-//* This moves all the dinos one cell to the left:
-// removeItem(dinoClass, dinosCurrentPosition)
-// dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-//   return dinoPosition -= 1
-// })
-// addItem(dinoClass, dinosCurrentPosition)
-
-
-//* This moves all the dinos one cell down:
-// removeItem(dinoClass, dinosCurrentPosition)
-// dinosCurrentPosition = dinosCurrentPosition.map(dinoPosition => {
-//   return dinoPosition += width
-// })
-// addItem(dinoClass, dinosCurrentPosition)
-//!
-//!
-
-
-
-
-
-  // cells[gunCurrentPosition].classList.add("gun")
-  // cells[82].classList.add("dino")
-  // cells[93].classList.add("missile")
-
-
-  // function createGrid() {
-  //   for (let i = 0; i < cellCount; i++) {
-  //     const cell = document.createElement("div")
-  //     cell.innerText = i
-  //     grid.appendChild(cell)
-  //     cells.push(cell)
-  //   }
-
-  //   createGrid()
