@@ -313,38 +313,20 @@ h1 {
   animation-duration: 1.5s;
 }
 
+.game-result-container {
+  animation-name: animate__heartBeat;
+  animation-delay: 1s;
+}
 
-/* h1 {
-  animation-name: animate__bounce;
-  animation-iteration-count: 5;
+.start-button-container {
+  animation-name: animate__pulse;
+  animation-delay: 1s;
+  animation-iteration-count: infinite;
+}
+
+.play-again-button-container {
+  animation-name: animate__pulse;
   animation-delay: 2s;
+  animation-iteration-count: infinite;
 }
- */
 
-
-
-
-
-
-
-
-
-/* .animate__animated.animate__fadeOutRight {
-  animation-duration: 2s;
-} */
-
-/* .animate__animated.animate__fadeInLeft {
-  animation-duration: 2s;
-} */
-
-
-
-
-/* 
-.animate__animated.animate__bounce {
-  --animate-duration: 500ms;
-  --animate-delay: 2s;
-  --animate-iteration-count: infinite;
-
-}
- */
