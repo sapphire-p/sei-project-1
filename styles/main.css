@@ -226,6 +226,11 @@ h1 {
   color: white;
 }
 
+.music-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 .score-paragraph, .lives-paragraph {
   font-family: 'VT323', monospace;
   font-size: 1.5em;
@@ -332,7 +337,7 @@ h1 {
 
 .start-button-container {
   animation-name: animate__pulse;
-  animation-delay: 1s;
+  animation-delay: 1.5s;
   animation-iteration-count: infinite;
 }
 
