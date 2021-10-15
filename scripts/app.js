@@ -84,6 +84,7 @@ let musicOn = true
 const musicButton = document.querySelector(".music-button")
 musicButton.addEventListener("click", musicButtonClicked)
 
+/* Music-related functions */
 
 function playMusic() {
   if (musicOn) {
@@ -95,7 +96,6 @@ function playMusic() {
 }
 
 function musicButtonClicked(event) {
-  console.log("Music button clicked")
   if (event.target.innerText === "Turn Music OFF") {
     musicOn = false
     event.target.innerText = "Turn Music ON"
@@ -109,7 +109,7 @@ function musicButtonClicked(event) {
 
 
 
-
+/* createdGrid function */
 
 function createGrid() {
   for (let i = 0; i < cellCount; i++) { // This block of code creates the grid
@@ -133,33 +133,6 @@ function createGrid() {
   dinosCurrentPosition = dinosStartPosition
   addItem(dinoClass, dinosCurrentPosition)
 }
-
-
-
-function playAgainButtonClicked() {
-
-  if (grid.hasChildNodes) { // If a grid already exists from a previous game, this block of code removes the grid by removing the grid's child elements one by one
-    let gridChildElementCount = grid.childElementCount
-    for (i = 0; i < gridChildElementCount; i++) {
-      grid.lastChild.remove()
-    }
-  }
-
-  cells = [] // In case a game has already been played, this resets the cells array to an empty array, ready to receive a fresh set of cell indexes when the new grid is created
-
-  createGrid()
-
-  scoreDisplay.innerText = score
-  livesDisplay.innerText = livesRemaining
-
-  endScreen.classList.add("animate__fadeOutRight")
-  setTimeout(() => {
-    endScreen.classList.add("hidden")
-    startGame()
-  }, 1000)
-
-}
-
 
 
 /* startGame function */
@@ -255,7 +228,6 @@ function startGame() {
 }
 
 
-
 /* endGame function */
 
 function endGame() {
@@ -291,9 +263,34 @@ function endGame() {
 }
 
 
+/* playAgainButtonClicked function */
+
+function playAgainButtonClicked() {
+
+  if (grid.hasChildNodes) { // If a grid already exists from a previous game, this block of code removes the grid by removing the grid's child elements one by one
+    let gridChildElementCount = grid.childElementCount
+    for (i = 0; i < gridChildElementCount; i++) {
+      grid.lastChild.remove()
+    }
+  }
+
+  cells = [] // In case a game has already been played, this resets the cells array to an empty array, ready to receive a fresh set of cell indexes when the new grid is created
+
+  createGrid()
+
+  scoreDisplay.innerText = score
+  livesDisplay.innerText = livesRemaining
+
+  endScreen.classList.add("animate__fadeOutRight")
+  setTimeout(() => {
+    endScreen.classList.add("hidden")
+    startGame()
+  }, 1000)
+
+}
+
 
 /* addItem and removeItem functions */
-
 
 function addItem(itemClass, position) {
   // The following control flow with conditional logic says "If itemClass is gunClass/missileClass/rockClass, do this, else if itemClass is dinoClass, do this"
@@ -318,9 +315,7 @@ function removeItem(itemClass, position) {
 }
 
 
-
 /* keysGunAction function */
-
 
 function keysGunAction(event) {
 
@@ -344,9 +339,7 @@ function keysGunAction(event) {
 }
 
 
-
 /* handleMissile function */
-
 
 function handleMissile() {
 
@@ -422,9 +415,7 @@ function handleMissile() {
 }
 
 
-
 /* handleRock function */
-
 
 function handleRock() {
 
