@@ -62,7 +62,7 @@ let rockTimer
 let dinosSpeed = 900 // 900 is the default, for a more challenging game. 1000 or 1500 for an easier game
 let rockSpeed = 600 // 600 usually (between 500-700 is good)
 let missileSpeed = 100 // 100 usually (200 for slower missiles and a more challenging game)
-let explosionSpeed = 330 // 300 usually
+let explosionSpeed = 320 // 300-320 usually
 
 
 // startButton and playAgainButton Event Listeners
